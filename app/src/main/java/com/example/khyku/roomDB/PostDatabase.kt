@@ -1,4 +1,4 @@
-package com.example.khyku.rommDB
+package com.example.khyku.roomDB
 
 import android.content.Context
 import androidx.room.Database

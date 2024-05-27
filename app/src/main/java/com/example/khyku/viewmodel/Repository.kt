@@ -1,7 +1,7 @@
 package com.example.khyku.viewmodel
 
-import com.example.khyku.rommDB.Post
-import com.example.khyku.rommDB.PostDatabase
+import com.example.khyku.roomDB.Post
+import com.example.khyku.roomDB.PostDatabase
 
 class Repository(private val db: PostDatabase) {
     val dao = db.getDao()

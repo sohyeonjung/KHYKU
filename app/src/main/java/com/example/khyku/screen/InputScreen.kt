@@ -1,7 +1,9 @@
 package com.example.khyku.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -10,11 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import com.example.khyku.rommDB.Post
+import com.example.khyku.roomDB.Post
+import com.example.khyku.viewmodel.PostViewModel
 
 @Composable
-fun InputScreen(viewModel: ViewModel) {
+fun InputScreen(viewModel: PostViewModel) {
 
     var postTitle by remember {
         mutableStateOf("")
@@ -43,7 +45,16 @@ fun InputScreen(viewModel: ViewModel) {
             onValueChange = {postContent = it},
             label = { Text("내용을 입력하세요 (시간, 장소, 진행 방식 등)")}
         )
+        Row {
+            Button(onClick = {
+                viewModel.InsertPost(post);
+            }) {
+                Text("글쓰기")
+            }
+        }
+
 
     }
 
 }
+

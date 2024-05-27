@@ -15,8 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.khyku.rommDB.Post
-import com.example.khyku.rommDB.PostDatabase
+import com.example.khyku.roomDB.Post
+import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.screen.InputScreen
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostViewModel

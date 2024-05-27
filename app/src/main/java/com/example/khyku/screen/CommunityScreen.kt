@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.khyku.rommDB.Post
+import com.example.khyku.roomDB.Post
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

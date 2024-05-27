@@ -1,4 +1,4 @@
-package com.example.khyku.rommDB
+package com.example.khyku.roomDB
 
 import androidx.room.Dao
 import androidx.room.Delete
