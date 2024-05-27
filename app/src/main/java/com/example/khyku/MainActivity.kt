@@ -6,8 +6,22 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.khyku.rommDB.Post
+import com.example.khyku.rommDB.PostDatabase
+import com.example.khyku.screen.InputScreen
 import com.example.khyku.ui.theme.KHYKUTheme
+import com.example.khyku.viewmodel.PostViewModel
+import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.viewmodel.Repository
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +33,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CommunityScreen()
+                    MainScreen()
                 }
             }
         }
     }
+}
+
+@Composable
+fun MainScreen(){
+    val context = LocalContext.current
+    val postdb = PostDatabase.getPostDatabase(context)
+    val viewModel:PostViewModel =
+        viewModel(factory = PostViewModelFactory(Repository(postdb)))
+
+    val postlist by viewModel.postList.collectAsState(initial = emptyList()) //~해서 자동으로 화면 recomposition
+    var selectedPost: Post? by remember {
+        mutableStateOf(null)
+    }
+    val selectedEvent = {post:Post -> selectedPost = post }
+    InputScreen(viewModel = viewModel)
+
+
 }
 

@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.khyku
+package com.example.khyku.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,10 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.khyku.rommDB.Post
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommunityScreen() {
+fun CommunityScreen(selectedPost: Post?=null) {
 
     var presses by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
