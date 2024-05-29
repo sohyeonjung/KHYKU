@@ -23,6 +23,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,11 +35,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.khyku.roomDB.Post
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.khyku.viewmodel.PostViewModel
+import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.viewmodel.Repository
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommunityScreen(selectedPost: Post?=null) {
+//fun CommunityScreen(selectedPost: Post?=null) {
+fun CommunityScreen() {
+
+
+    val table = Firebase.database.getReference("Products/items")
+    val viewModel: PostViewModel =
+        viewModel(factory = PostViewModelFactory(Repository(table)))
+
+    val postlist by viewModel.postList.collectAsState()
+
 
     var presses by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
@@ -111,18 +126,13 @@ fun CommunityScreen(selectedPost: Post?=null) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            Text("test")
+            viewModel.getAllItems()
 
-//            Text(
-//                modifier = Modifier.padding(8.dp),
-//                text =
-//                """
-//                    This is an example of a scaffold. It uses the Scaffold composable's parameters to create a screen with a simple top app bar, bottom app bar, and floating action button.
-//
-//                    It also contains some basic inner content, such as this text.
-//
-//                    You have pressed the floating action button $presses times.
-//                """.trimIndent(),
-//            )
+            if(postlist.isEmpty())
+               Text(text = "post 없음")
+
+            PostList(list = postlist)
         }
     }
 

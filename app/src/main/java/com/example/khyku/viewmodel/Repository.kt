@@ -13,6 +13,7 @@ class Repository(private val table: DatabaseReference) {
     suspend fun InsertPost(post: Post){
         table.child(post.postTitle).setValue(post)
         //table.child(item.itemId.toString()).setValue(item)
+
     }
 
     suspend fun UpdatePost(post: Post){

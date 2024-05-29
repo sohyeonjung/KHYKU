@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.roomDB.Post
-import com.example.khyku.screen.InputScreen
+import com.example.khyku.screen.CommunityScreen
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
@@ -34,7 +34,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    //MainScreen()
+                    CommunityScreen()
                 }
             }
         }
@@ -53,7 +54,8 @@ fun MainScreen(){
         mutableStateOf(null)
     }
     val selectedEvent = {post:Post -> selectedPost = post }
-    InputScreen(viewModel = viewModel)
+
+    //InputScreen(viewModel = viewModel)
 
 
 }
