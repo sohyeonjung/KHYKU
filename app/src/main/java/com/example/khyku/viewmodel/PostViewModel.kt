@@ -46,4 +46,14 @@ class PostViewModel(private val repository:Repository):ViewModel(){
             }
         }
     }
+
+    fun getItems(postName:String){
+        viewModelScope.launch {
+            repository.getItems(postName).collect(){
+                _postList.value = it
+            }
+        }
+    }
+
+
 }

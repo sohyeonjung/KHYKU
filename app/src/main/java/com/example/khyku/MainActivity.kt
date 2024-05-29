@@ -36,6 +36,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //MainScreen()
                     CommunityScreen()
+//                    val post = Post("title", "contents", "type", false, " ")
+//                    PostDetailScreen(post)
                 }
             }
         }

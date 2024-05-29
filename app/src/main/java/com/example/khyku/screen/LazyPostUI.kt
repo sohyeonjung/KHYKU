@@ -1,5 +1,6 @@
 package com.example.khyku.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,20 +16,21 @@ import androidx.compose.ui.unit.dp
 import com.example.khyku.roomDB.Post
 
 @Composable
-fun PostList(list: List<Post>) {
+fun PostList(list: List<Post>, onClick: (post:Post) -> Unit) {
     LazyColumn {
         items(list) { post ->
-            PostUI(post)
+            PostUI(post, onClick)
             Divider(color = Color.Black, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun PostUI(post: Post) {
+fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
     Column(modifier = Modifier
         .padding(10.dp)
-        .fillMaxWidth()){
+        .fillMaxWidth()
+        .clickable { onClick(post)}){
         Row {
             var donetext:String = "모집중"
             if(post.postDone==false) donetext="모집 완료"

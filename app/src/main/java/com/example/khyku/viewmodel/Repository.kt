@@ -50,4 +50,34 @@ class Repository(private val table: DatabaseReference) {
 
     }
 
+    fun getItems(postName: String): Flow<List<Post>> = callbackFlow {
+        val query = table.orderByChild("postTitle")
+            .startAt(postName)
+            .endAt(postName + "\uf8ff")
+
+        //val query = table.orderByChild("postTitle").equalTo(postName)
+        //val query = table.orderByChild("postTitle").st
+        //g.equalTo(itemName)
+
+        val listener = object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val postList = mutableListOf<Post>()
+                for(postSnapshot in snapshot.children){
+                    val post = postSnapshot.getValue(Post::class.java)
+                    post?.let { postList.add(it) }
+                }
+                trySend(postList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+        query.addListenerForSingleValueEvent(listener)
+        awaitClose{
+            query.removeEventListener(listener)
+        }
+    }
+
+
 }
