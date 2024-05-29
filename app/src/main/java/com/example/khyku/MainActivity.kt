@@ -16,12 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.roomDB.Post
-import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.screen.InputScreen
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
 import com.example.khyku.viewmodel.Repository
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +44,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(){
     val context = LocalContext.current
-    val postdb = PostDatabase.getPostDatabase(context)
+    val table = Firebase.database.getReference("Products/items")
     val viewModel:PostViewModel =
-        viewModel(factory = PostViewModelFactory(Repository(postdb)))
+        viewModel(factory = PostViewModelFactory(Repository(table)))
 
     val postlist by viewModel.postList.collectAsState(initial = emptyList()) //~해서 자동으로 화면 recomposition
     var selectedPost: Post? by remember {

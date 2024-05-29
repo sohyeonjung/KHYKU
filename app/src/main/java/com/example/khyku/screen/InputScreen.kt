@@ -47,7 +47,7 @@ fun InputScreen(viewModel: PostViewModel) {
         )
         Row {
             Button(onClick = {
-                viewModel.InsertPost(post);
+                viewModel.InsertPost(post); clearText()
             }) {
                 Text("글쓰기")
             }
