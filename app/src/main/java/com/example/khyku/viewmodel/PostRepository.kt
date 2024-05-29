@@ -1,6 +1,6 @@
 package com.example.khyku.viewmodel
 
-import com.example.khyku.roomDB.Post
+import com.example.khyku.DB.Post
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -9,7 +9,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class Repository(private val table: DatabaseReference) {
+class PostRepository(private val table: DatabaseReference) {
     suspend fun InsertPost(post: Post){
         table.child(post.postTitle).setValue(post)
         //table.child(item.itemId.toString()).setValue(item)

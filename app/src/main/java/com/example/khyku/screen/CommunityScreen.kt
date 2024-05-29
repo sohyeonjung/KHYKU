@@ -41,9 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
-import com.example.khyku.viewmodel.Repository
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
 
@@ -58,7 +58,7 @@ fun CommunityScreen() {
 
     val table = Firebase.database.getReference("Products/items")
     val viewModel: PostViewModel =
-        viewModel(factory = PostViewModelFactory(Repository(table)))
+        viewModel(factory = PostViewModelFactory(PostRepository(table)))
 
     val postlist by viewModel.postList.collectAsState()
 
