@@ -23,6 +23,8 @@ class Repository(private val table: DatabaseReference) {
 
     suspend fun DeletePost(post: Post){
         table.child(post.postTitle).removeValue()
+        //table.child(item.itemId.toString())
+        //            .child("itemQuantity").setValue(item.itemQuantity)
     }
 
     fun getAllItems(): Flow<List<Post>> = callbackFlow{

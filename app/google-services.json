@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "343745279064",
-    "project_id": "khyku-6c003",
-    "storage_bucket": "khyku-6c003.appspot.com"
+    "project_number": "1088217915045",
+    "project_id": "khyku-9ef40",
+    "storage_bucket": "khyku-9ef40.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:343745279064:android:6c7c8258d84178516bc62d",
+        "mobilesdk_app_id": "1:1088217915045:android:0d69a27d139457adaab74c",
         "android_client_info": {
           "package_name": "com.example.khyku"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBLGgyOafa9LcHE984KfuXWWviQRojEi0Y"
+          "current_key": "AIzaSyAtGrl6LJXDlqw4g7OUROBe_vQEuwSkFxI"
         }
       ],
       "services": {
