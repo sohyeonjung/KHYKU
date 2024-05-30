@@ -2,12 +2,14 @@
 
 package com.example.khyku.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,13 +25,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.khyku.viewmodel.PostRepository
@@ -67,7 +70,6 @@ fun CommunityScreen() {
     }
 
 
-    var presses by remember { mutableIntStateOf(0) }
     var searchText by remember { mutableStateOf("") }
     val KonkukGreen = Color(0xFF036B3F)
 
@@ -81,7 +83,9 @@ fun CommunityScreen() {
                 ),
                 title = {
                     Text(text = "스터디원 찾기",
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(100.dp, 50.dp),
+                        fontSize = 30.sp //이게 크기 최대
                     )
                 }
             )
@@ -103,7 +107,9 @@ fun CommunityScreen() {
         //+++수정
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { presses++ },
+                onClick = {
+                          //navigate
+                },
                 containerColor = KonkukGreen) {
                 Icon(Icons.Default.Edit, contentDescription = "Add")
             }
@@ -119,13 +125,11 @@ fun CommunityScreen() {
                 TextField(
                     value = searchText,
                     onValueChange = { searchText = it },
-//                colors = TextFieldDefaults.textFieldColors(
-//                    containerColor = Color.White,
-//                    //textColor = Color.Black,
-//                    focusedIndicatorColor = Color.White,
-//                    unfocusedIndicatorColor = Color.White
-//                ),
-                    placeholder = { Text("제목 검색") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = KonkukGreen
+                    ),
+                    placeholder = {
+                        Text( text = "스터디 검색", color = Color.White) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
@@ -134,24 +138,26 @@ fun CommunityScreen() {
                     leadingIcon = {
                         Icon(Icons.Default.Search, contentDescription = "Search")
                     },
-                    modifier = Modifier.width(250.dp),
-
+                    modifier = Modifier.width(360.dp)
 
                 )
                 Icon(Icons.Default.Refresh,
                     contentDescription = "update",
-                    modifier = Modifier.width(100.dp)
+                    modifier = Modifier
+                        .size(56.dp)
+                        .background(color = KonkukGreen)
                         .clickable {
                             viewModel.getAllItems()
-                        }
-                    )
+                        },
+                )
 
             }
 
-            Text("test")
-
-            if(postlist.isEmpty())
-               Text(text = "post 없음")
+            if(postlist.isEmpty()){
+                Text(text = "해당하는 게시물이 없습니다.",
+                    modifier = Modifier.padding(start = 115.dp))
+                searchText=" "
+            }
 
             PostList(
                 list = postlist
@@ -160,6 +166,7 @@ fun CommunityScreen() {
 //                navController.navigate("post_detail/$post")
             }
         }
+
     }
 
 }

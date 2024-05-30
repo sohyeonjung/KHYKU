@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.DB.Post
-import com.example.khyku.screen.PostDetailScreen
+import com.example.khyku.screen.CommunityScreen
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
@@ -35,9 +35,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //MainScreen()
-                    //CommunityScreen()
-                    val post = Post("title", "contents", "type", false, " ")
-                    PostDetailScreen(post)
+                    CommunityScreen()
+                    //val post = Post("title", "contents", "type", false, " ")
+                    //PostDetailScreen(post)
                 }
             }
         }
