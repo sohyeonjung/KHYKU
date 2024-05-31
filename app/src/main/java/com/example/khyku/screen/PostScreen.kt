@@ -13,20 +13,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.khyku.DB.Post
+import com.example.khyku.roomDB.CommentDatabase
+import com.example.khyku.roomDB.Post
 import com.example.khyku.viewmodel.CommentRepository
 import com.example.khyku.viewmodel.CommentViewModel
 import com.example.khyku.viewmodel.CommentViewModelFactory
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
 @Composable
 fun PostDetailScreen(post: Post) {
 
-    val table = Firebase.database.getReference("Products/items")
-    val viewModel: CommentViewModel =
-        viewModel(factory = CommentViewModelFactory(CommentRepository(table)))
+    val context = LocalContext.current
+    val commentdb = CommentDatabase.getCommentDatabase(context)
+    val viewModel:CommentViewModel =
+        viewModel(factory = CommentViewModelFactory(CommentRepository(commentdb)))
 
     val commentlist by viewModel.commentList.collectAsState(initial = emptyList())
 

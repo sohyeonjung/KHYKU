@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -37,31 +36,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
+import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//fun CommunityScreen(selectedPost: Post?=null) {
 fun CommunityScreen() {
-
-    val scrollState = rememberScrollState()
-
-    val navController = rememberNavController()
-
-    val table = Firebase.database.getReference("Products/items")
+    val context = LocalContext.current
+    val postdb = PostDatabase.getPostDatabase(context)
     val viewModel: PostViewModel =
-        viewModel(factory = PostViewModelFactory(PostRepository(table)))
+        viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
 
     val postlist by viewModel.postList.collectAsState()
 

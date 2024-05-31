@@ -15,14 +15,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.khyku.DB.Post
-import com.example.khyku.screen.CommunityScreen
+import com.example.khyku.roomDB.Post
+import com.example.khyku.roomDB.PostDatabase
+import com.example.khyku.screen.PostInputScreen
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +33,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //MainScreen()
-                    CommunityScreen()
+                    MainScreen()
+                    //CommunityScreen()
                     //val post = Post("title", "contents", "type", false, " ")
                     //PostDetailScreen(post)
                 }
@@ -47,17 +46,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(){
     val context = LocalContext.current
-    val table = Firebase.database.getReference("Products/items")
+    val postdb = PostDatabase.getPostDatabase(context)
     val viewModel:PostViewModel =
-        viewModel(factory = PostViewModelFactory(PostRepository(table)))
+        viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
 
     val postlist by viewModel.postList.collectAsState(initial = emptyList()) //~해서 자동으로 화면 recomposition
-    var selectedPost: Post? by remember {
-        mutableStateOf(null)
+    var selectedPost: Post? by remember{
+        mutableStateOf<Post?>(null)
     }
     val selectedEvent = {post:Post -> selectedPost = post }
 
-    //InputScreen(viewModel = viewModel)
+    PostInputScreen(viewModel = viewModel)
 
 
 }
