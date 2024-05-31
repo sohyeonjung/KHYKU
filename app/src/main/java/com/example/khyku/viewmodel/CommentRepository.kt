@@ -21,5 +21,4 @@ class CommentRepository(private val db: CommentDatabase) {
 
     fun getAllItems() = dao.getAllItems()
 
-
 }

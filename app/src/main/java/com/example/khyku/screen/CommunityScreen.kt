@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
@@ -34,10 +33,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.khyku.nav.Routes
 import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
@@ -45,7 +45,7 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommunityScreen() {
+fun CommunityScreen(navController: NavHostController) {
     val context = LocalContext.current
     val postdb = PostDatabase.getPostDatabase(context)
     val viewModel: PostViewModel =
@@ -78,11 +78,10 @@ fun CommunityScreen() {
                 }
             )
         },
-        //+++수정
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    //navController.navigate(Routes.InputPost.route)
+                    navController.navigate(Routes.InputPost.route)
                 },
                 containerColor = KonkukGreen) {
                 Icon(Icons.Default.Edit, contentDescription = "Add")
@@ -105,7 +104,7 @@ fun CommunityScreen() {
                     placeholder = {
                         Text( text = "스터디 검색", color = Color.White) },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                    //keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
                         viewModel.getItems(searchText)
                     }),

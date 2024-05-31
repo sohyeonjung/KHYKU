@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.khyku.roomDB.CommentDatabase
 import com.example.khyku.roomDB.Post
 import com.example.khyku.viewmodel.CommentRepository
@@ -40,24 +40,29 @@ import com.example.khyku.viewmodel.CommentViewModelFactory
 
 @ExperimentalMaterial3Api
 @Composable
-fun PostDetailScreen(post: Post) {
+fun PostDetailScreen(post:Post, navController: NavController) {
 
     val KonkukGreen = Color(0xFF036B3F)
 
-    val state = rememberScrollState()
-
-
     val context = LocalContext.current
+
     val commentdb = CommentDatabase.getCommentDatabase(context)
-    val viewModel: CommentViewModel =
+    val commentviewModel: CommentViewModel =
         viewModel(factory = CommentViewModelFactory(CommentRepository(commentdb)))
 
-    val commentlist by viewModel.commentList.collectAsState(initial = emptyList())
+    val commentlist by commentviewModel.commentList.collectAsState(initial = emptyList())
+
+//    val postdb = PostDatabase.getPostDatabase(context)
+//    val postviewModel: PostViewModel =
+//        viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
+//
+//    val postlist by commentviewModel.commentList.collectAsState(initial = emptyList())
+
 
     var showCommentDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
-        viewModel.getAllItems()
+        commentviewModel.getAllItems()
     }
 
     Column (
@@ -128,7 +133,7 @@ fun PostDetailScreen(post: Post) {
 
                 if (showCommentDialog) {
                     CommentInputDialog(
-                        onDismiss = { showCommentDialog = false }, viewModel
+                        onDismiss = { showCommentDialog = false }, commentviewModel
                     )
                 }
             }

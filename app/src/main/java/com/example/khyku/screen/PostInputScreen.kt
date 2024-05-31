@@ -25,12 +25,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.khyku.nav.Routes
 import com.example.khyku.roomDB.Post
 import com.example.khyku.viewmodel.PostViewModel
 
 
 @Composable
-fun PostInputScreen(viewModel: PostViewModel) {
+fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) {
 
     var postTitle by remember {
         mutableStateOf("")
@@ -135,7 +137,7 @@ fun PostInputScreen(viewModel: PostViewModel) {
 
         )
         Button(onClick = { viewModel.InsertPost(post)
-                         //여기에 navigate
+                         navController.navigate(Routes.Community.route)
             },
             modifier = Modifier
                 .fillMaxSize()
