@@ -29,7 +29,6 @@ import com.example.khyku.roomDB.Post
 import com.example.khyku.viewmodel.PostViewModel
 
 
-
 @Composable
 fun PostInputScreen(viewModel: PostViewModel) {
 

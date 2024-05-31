@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.khyku.roomDB.Comment
-
 @Composable
 fun CommentList(list: List<Comment>) {
     LazyColumn {

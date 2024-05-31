@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.khyku.roomDB.Comment
 import com.example.khyku.viewmodel.CommentViewModel
 
 @Composable
@@ -20,7 +19,8 @@ fun CommentInputDialog(
     var commentText by remember { mutableStateOf(" ") }
 
 
-    val comment = Comment(commentText, getCurrentTime(), 0) //+++이거 마지막 0 늘어나게 수정
+    val comment =
+        com.example.khyku.roomDB.Comment(commentText, getCurrentTime(), 0) //+++이거 마지막 0 늘어나게 수정
 
     AlertDialog(
         onDismissRequest = onDismiss,

@@ -23,20 +23,20 @@ import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             KHYKUTheme {
-                // A surface container using the 'background' color from the theme
+                // A surface container using the 'background' colo  r from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen()
                     //CommunityScreen()
-                    //val post = Post("title", "contents", "type", false, " ")
-                    //PostDetailScreen(post)
+
                 }
             }
         }

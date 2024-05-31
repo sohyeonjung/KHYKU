@@ -21,12 +21,13 @@ import com.example.khyku.viewmodel.CommentRepository
 import com.example.khyku.viewmodel.CommentViewModel
 import com.example.khyku.viewmodel.CommentViewModelFactory
 
+
 @Composable
 fun PostDetailScreen(post: Post) {
 
     val context = LocalContext.current
     val commentdb = CommentDatabase.getCommentDatabase(context)
-    val viewModel:CommentViewModel =
+    val viewModel: CommentViewModel =
         viewModel(factory = CommentViewModelFactory(CommentRepository(commentdb)))
 
     val commentlist by viewModel.commentList.collectAsState(initial = emptyList())
