@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.example.khyku.screen
 
 import androidx.compose.foundation.background
@@ -7,18 +5,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -39,11 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
@@ -52,12 +46,15 @@ import com.google.firebase.database.database
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-//fun CommunityScreen(selectedPost: Post?=null) {
-fun CommunityScreen() {
+fun CommunityScreen(navController: NavController) {
 
-    val scrollState = rememberScrollState()
 
-    val navController = rememberNavController()
+    // 디버깅 코드 추가
+//    LaunchedEffect(Unit) {
+//        println("Routes.InputPost.route: ${Routes.InputPost.route}")
+//        println("navController.currentDestination: ${navController.currentDestination?.route}")
+//    }
+
 
     val table = Firebase.database.getReference("Products/items")
     val viewModel: PostViewModel =
@@ -90,25 +87,11 @@ fun CommunityScreen() {
                 }
             )
         },
-        ///++수정
-        bottomBar = {
-            BottomAppBar(
-                containerColor = KonkukGreen,
-                contentColor = Color.Black
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = "수정해야할부분",
-                )
-            }
-        },
         //+++수정
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                          //navigate
+                    //navController.navigate(Routes.InputPost.route)
                 },
                 containerColor = KonkukGreen) {
                 Icon(Icons.Default.Edit, contentDescription = "Add")
@@ -162,8 +145,7 @@ fun CommunityScreen() {
             PostList(
                 list = postlist
             ) {
-//                post ->
-//                navController.navigate("post_detail/$post")
+                //navigate써야함
             }
         }
 

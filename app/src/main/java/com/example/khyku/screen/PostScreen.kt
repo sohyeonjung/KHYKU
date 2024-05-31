@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.khyku.DB.Post
+import com.example.khyku.db.Post
 import com.example.khyku.viewmodel.CommentRepository
 import com.example.khyku.viewmodel.CommentViewModel
 import com.example.khyku.viewmodel.CommentViewModelFactory

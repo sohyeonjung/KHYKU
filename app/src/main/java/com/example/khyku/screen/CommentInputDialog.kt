@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.khyku.DB.Comment
+import com.example.khyku.db.Comment
 import com.example.khyku.viewmodel.CommentViewModel
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.khyku.DB
+package com.example.khyku.db
 
 data class Comment(
 

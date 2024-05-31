@@ -1,6 +1,6 @@
 package com.example.khyku.viewmodel
 
-import com.example.khyku.DB.Comment
+import com.example.khyku.db.Comment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
