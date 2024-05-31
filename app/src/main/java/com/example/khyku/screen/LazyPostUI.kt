@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.khyku.roomDB.Post
 
 @Composable
@@ -40,12 +42,16 @@ fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
         Row {
             var donetext:String = "모집중"
             if(post.postDone==false) donetext="모집 완료"
-            Button(onClick = {}) { Text(text = donetext, color = Color.White)}
+            Button(onClick = {
+                             //navigate
+            },
+                colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)
+            ) { Text(text = donetext, color = Color.White)}
             Spacer(modifier = Modifier.padding(start = 20.dp))
             OutlinedButton(onClick = {}
             ) { Text(text = post.postType, color = Color.Black)}
         }
-        Text(text = post.postTitle)
+        Text(text = post.postTitle, fontSize = 30.sp)
         Text(text = post.postTime)
     }
 }

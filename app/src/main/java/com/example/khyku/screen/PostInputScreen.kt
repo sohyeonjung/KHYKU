@@ -50,9 +50,9 @@ fun PostInputScreen(viewModel: PostViewModel) {
     val post = Post(postTitle, postContent, postType, postDone, getCurrentTime())
 
     fun clearText(){
-        postTitle = " "
-        postContent = " "
-        postType = " "
+        postTitle = ""
+        postContent = ""
+        postType = ""
     }
 
     Column(modifier = Modifier
@@ -134,7 +134,9 @@ fun PostInputScreen(viewModel: PostViewModel) {
                 .fillMaxSize()
 
         )
-        Button(onClick = { viewModel.InsertPost(post); clearText() },
+        Button(onClick = { viewModel.InsertPost(post)
+                         //여기에 navigate
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(10.dp),

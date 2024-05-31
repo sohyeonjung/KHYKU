@@ -8,6 +8,5 @@ data class Comment(
     var commentContents:String,
     var commentTime:String,
     @PrimaryKey(autoGenerate = true)
-    var commentId:Int,
-
+    var commentId:Int=0
 )

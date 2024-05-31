@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.roomDB.Post
 import com.example.khyku.roomDB.PostDatabase
+import com.example.khyku.screen.PostDetailScreen
 import com.example.khyku.screen.PostInputScreen
+import com.example.khyku.screen.getCurrentTime
 import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
@@ -34,8 +36,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    //MainScreen()
                     //CommunityScreen()
+                    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj",
+                        "programming",true, getCurrentTime()
+                    )
+                    PostDetailScreen(post = post)
 
                 }
             }
