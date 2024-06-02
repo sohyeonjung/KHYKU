@@ -18,5 +18,7 @@ interface CommentDao {
     @Query("SELECT * FROM comments")
     fun getAllItems(): Flow<List<Comment>>
 
+    @Query("SELECT * FROM comments WHERE commentPost = :postId") //일치 시
+    fun getItems(postId: String): Flow<List<Comment>>
 
 }

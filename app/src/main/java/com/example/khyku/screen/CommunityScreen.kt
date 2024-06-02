@@ -1,5 +1,6 @@
 package com.example.khyku.screen
 
+import android.os.SystemClock.sleep
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,7 +59,7 @@ fun CommunityScreen(navController: NavHostController) {
     var selectedPostTitle by remember { mutableStateOf("") }
     var selectedPostId by remember { mutableStateOf("") }
     var selectedPostType by remember { mutableStateOf("")}
-    var selectedPostTime by remember { mutableStateOf("") }
+    var selectedPostTime by remember { mutableStateOf(" ") }
     var selectedPostDone by remember { mutableStateOf(false) }
     var selectedPostContents by remember { mutableStateOf("") }
 
@@ -104,9 +105,6 @@ fun CommunityScreen(navController: NavHostController) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(
-                text = "선택된 게시물: $selectedPostTitle (ID: $selectedPostId)"
-            )
             Row {
                 TextField(
                     value = searchText,
@@ -140,7 +138,7 @@ fun CommunityScreen(navController: NavHostController) {
             }
 
             if(postlist.isEmpty()){
-                Text(text = "해당하는 게시물이 없습니다.",
+                Text(text = "게시물이 없습니다.",
                     modifier = Modifier.padding(start = 115.dp))
                 searchText=" "
             }
@@ -148,13 +146,16 @@ fun CommunityScreen(navController: NavHostController) {
             PostList(
                 list = postlist
             ) { it ->
-                selectedPostId=it.postId.toString()
-                selectedPostTitle=it.postTitle
-                selectedPostDone=it.postDone
-                selectedPostTime=it.postTime
-                selectedPostContents=it.postContents
-                selectedPostType=it.postType
-                navController.navigate("Post/$selectedPostTitle/$selectedPostContents/$selectedPostType/$selectedPostId")
+                selectedPostId = it.postId.toString()
+                selectedPostTitle = it.postTitle
+                selectedPostType = it.postType
+                selectedPostContents = it.postContents
+                println(selectedPostContents)
+
+                sleep(500)
+
+                //navController.navigate("Post/$selectedPostTitle/$selectedPostContents/$selectedPostType/$selectedPostId")
+                navController.navigate("Post/${it.postTitle}/${it.postContents}/${it.postType}/${it.postId}")
             }
         }
 

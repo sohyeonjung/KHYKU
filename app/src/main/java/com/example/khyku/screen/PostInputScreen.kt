@@ -136,8 +136,16 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                 .fillMaxSize()
 
         )
-        Button(onClick = { viewModel.InsertPost(post)
-                         navController.navigate(Routes.Community.route)
+        Button(onClick = {
+
+            //TODO(빈 string 거르기)
+            if(post.postTitle.isNullOrBlank()) post.postTitle = "no title"
+            if(post.postContents.isBlank()) post.postContents = "no contents"
+            if(post.postType.isBlank()) post.postType = "no type"
+
+
+            viewModel.InsertPost(post)
+            navController.navigate(Routes.Community.route)
             },
             modifier = Modifier
                 .fillMaxSize()

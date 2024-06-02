@@ -20,5 +20,6 @@ class CommentRepository(private val db: CommentDatabase) {
 //    }
 
     fun getAllItems() = dao.getAllItems()
+    fun getItems(postId:String) = dao.getItems(postId)
 
 }

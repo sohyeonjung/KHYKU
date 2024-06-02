@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Comment(
     var commentContents:String,
     var commentTime:String,
+    var commentPost:String,
     @PrimaryKey(autoGenerate = true)
     var commentId:Int=0
 )

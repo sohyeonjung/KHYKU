@@ -21,10 +21,10 @@ class CommentViewModel(private val commentRepository:CommentRepository):ViewMode
     private var _commentList = MutableStateFlow<List<Comment>>(emptyList())
     val commentList = _commentList.asStateFlow()
 
-    fun InsertComment(comment:Comment){
+    fun InsertComment(comment:Comment, postId: String){
         viewModelScope.launch {
             commentRepository.InsertComment(comment)
-            getAllItems()
+            getItems(postId)
         }
     }
 //    fun UpdatePost(post:Post){
@@ -54,6 +54,13 @@ class CommentViewModel(private val commentRepository:CommentRepository):ViewMode
 //            }
 //        }
 //    }
+    fun getItems(postId:String){
+        viewModelScope.launch {
+            commentRepository.getItems(postId).collect(){
+                _commentList.value = it
+            }
+        }
+    }
 
 
 

@@ -68,7 +68,7 @@ fun PostDetailScreen(
     var showCommentDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
-        commentviewModel.getAllItems()
+        commentviewModel.getItems(postId.toString())
     }
     val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
 
@@ -116,7 +116,7 @@ fun PostDetailScreen(
                 color = Color.Black,
                 fontSize = 15.sp
             )
-            Text(text = postContents.toString() + "/n아이디"+postId.toString(),
+            Text(text = postContents.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 10.dp, bottom = 10.dp),
@@ -140,7 +140,7 @@ fun PostDetailScreen(
 
                 if (showCommentDialog) {
                     CommentInputDialog(
-                        onDismiss = { showCommentDialog = false }, commentviewModel
+                        onDismiss = { showCommentDialog = false }, commentviewModel, postId.toString()
                     )
                 }
             }
