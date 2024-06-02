@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,11 +42,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.R
 import com.example.khyku.User.Subject
 import com.example.khyku.User.User
 import com.google.ads.interactivemedia.pal.utils.Duration
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -68,7 +75,68 @@ class UserViewModel: ViewModel(){
     fun changeTimerActive(){
         timerActive.value = !timerActive.value
     }
+
+    private val _timer = MutableStateFlow(0L)
+    val timer = _timer.asStateFlow()
+
+    private var timerJob: Job? = null
+
+    fun startTimer() {
+        timerJob?.cancel()
+        timerJob = viewModelScope.launch {
+            while (true) {
+                delay(1000)
+                _timer.value++
+            }
+        }
+    }
+
+    fun pauseTimer() {
+        timerJob?.cancel()
+    }
+
+    fun stopTimer() {
+        _timer.value = 0
+        timerJob?.cancel()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timerJob?.cancel()
+    }
 }
+
+
+//class TimerViewModel : ViewModel() {
+//    private val _timer = MutableStateFlow(0L)
+//    val timer = _timer.asStateFlow()
+//
+//    private var timerJob: Job? = null
+//
+//    fun startTimer() {
+//        timerJob?.cancel()
+//        timerJob = viewModelScope.launch {
+//            while (true) {
+//                delay(1000)
+//                _timer.value++
+//            }
+//        }
+//    }
+//
+//    fun pauseTimer() {
+//        timerJob?.cancel()
+//    }
+//
+//    fun stopTimer() {
+//        _timer.value = 0
+//        timerJob?.cancel()
+//    }
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//        timerJob?.cancel()
+//    }
+//}
 
 //@OptIn(ExperimentalMaterial3Api::class)
 //@Composable
@@ -251,10 +319,13 @@ fun HomeScreenActive(userViewModel: UserViewModel = viewModel()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.KUGrenn)), Arrangement.Top, Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(24.dp))
         DateField()
-        TimerField(userViewModel)
-        Text(userViewModel.selectedSub.name.toString())
-        TimerButtonField(userViewModel)
+        Spacer(modifier = Modifier.height(140.dp))
+        //TimerField(userViewModel)
+        Text(userViewModel.selectedSub.name, color = Color.White)
+        Spacer(modifier = Modifier.height(28.dp))
+        TimerScreenContent(userViewModel)
     }
 }
 
@@ -264,11 +335,12 @@ fun HomeScreenInit(userViewModel: UserViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(24.dp))
         DateField()
         Spacer(modifier = Modifier.height(140.dp))
-        TimerField(userViewModel)
-        Spacer(modifier = Modifier.height(30.dp))
+        //TimerField(userViewModel)
+        //Spacer(modifier = Modifier.height(30.dp))
         DropDownBoxField(userViewModel)
         Spacer(modifier = Modifier.height(28.dp))
-        TimerButtonField(userViewModel)
+        //TimerButtonField(userViewModel)
+        TimerScreenContent(userViewModel)
     }
 }
 
@@ -303,7 +375,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
         }) {
             //https://velog.io/@baekhk1006/kotlin-null%EC%9D%84-%EB%8B%A4%EB%A3%A8%EB%8A%94-%EB%B0%A9%EB%B2%95-yzwb6i7u
             var subName = userViewModel.selectedSub.name
-            Box(modifier = Modifier.background(Color.LightGray)){
+            Box{
                 Text(text = subName)
             }
             Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "")
@@ -324,7 +396,8 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                         userViewModel.selectedSub = subject
                         expanded = false
                         subName = subject.name
-                    }
+                    },
+                    modifier = Modifier.padding()
                     )
                 }
             }
@@ -352,9 +425,99 @@ fun TimerButtonField(userViewModel: UserViewModel) {
     }
 }
 
+//@Composable
+//fun FloatingButton(onClick:()->Unit) {
+//    FloatingActionButton(onClick = onClick) {
+//        Icon(imageVector = Icons.Default.Add, contentDescription = "add")
+//    }
+//}
+
+fun Long.formatTime(): String {
+    val hours = this / 3600
+    val minutes = (this % 3600) / 60
+    val remainingSeconds = this % 60
+    return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
+}
+
 @Composable
-fun FloatingButton(onClick:()->Unit) {
-    FloatingActionButton(onClick = onClick) {
-        Icon(imageVector = Icons.Default.Add, contentDescription = "add")
+fun TimerScreenContent(userViewModel: UserViewModel) {
+    val timerValue by userViewModel.timer.collectAsState()
+
+    TimerScreen(
+        timerValue = timerValue,
+//        onStartClick = { timerViewModel.startTimer() },
+//        onPauseClick = { timerViewModel.pauseTimer() },
+//        onStopClick = { timerViewModel.stopTimer() }
+        userViewModel = userViewModel
+    )
+}
+
+@Composable
+fun TimerScreen(
+    timerValue: Long,
+    userViewModel: UserViewModel
+) {
+    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if(!userViewModel.timerActive.value){
+            Text(text = timerValue.formatTime(), fontSize = 24.sp)
+        }
+        else{
+            Text(text = timerValue.formatTime(), fontSize = 24.sp, color = Color.White)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+//            Button(onClick = onStartClick) {
+//                Text("Start")
+//            }
+//            Spacer(modifier = Modifier.width(16.dp))
+//            Button(onClick = onPauseClick) {
+//                Text("Pause")
+//            }
+//            Spacer(modifier = Modifier.width(16.dp))
+//            Button(onClick = onStopClick) {
+//                Text("Stop")
+//            }
+
+            if(!userViewModel.timerActive.value){
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.KUGrenn),
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.LightGray,
+                        disabledContentColor = Color.White,
+                    ),
+                    onClick = {
+                        userViewModel.timerActive.value = !userViewModel.timerActive.value
+                        userViewModel.startTimer()
+                    }
+                ) {
+                    Text(text = "공부 시작")
+                }
+            }
+            else{
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = colorResource(id = R.color.KUGrenn),
+                        disabledContainerColor = Color.LightGray,
+                        disabledContentColor = Color.White,
+                    ),
+                    onClick = {
+                        userViewModel.timerActive.value = !userViewModel.timerActive.value
+                        userViewModel.stopTimer()
+                    }
+                ) {
+                    Text(text = "중지")
+                }
+            }
+
+        }
     }
 }
