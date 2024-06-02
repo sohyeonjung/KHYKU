@@ -1,5 +1,6 @@
 package com.example.khyku.screen
 
+import android.os.SystemClock.sleep
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -142,8 +143,8 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
             if(post.postTitle.isNullOrBlank()) post.postTitle = "no title"
             if(post.postContents.isBlank()) post.postContents = "no contents"
             if(post.postType.isBlank()) post.postType = "no type"
-
-
+            sleep(300)
+            println(post.postTitle+"::"+post.postContents+"::"+post.postType)
             viewModel.InsertPost(post)
             navController.navigate(Routes.Community.route)
             },
