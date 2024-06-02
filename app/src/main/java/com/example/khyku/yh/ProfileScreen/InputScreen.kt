@@ -16,11 +16,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
-import java.time.Duration
 import java.time.LocalTime
 
 @Composable
-fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = null) {
+fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = null) {
     var userId by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
 

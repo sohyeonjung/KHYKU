@@ -28,6 +28,7 @@ import com.example.khyku.ui.theme.KHYKUTheme
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.yh.ProfileScreen.InputScreen
 import com.example.khyku.yh.ProfileScreen.ProfileScreen
 import com.example.khyku.yh.ProfileScreen.UserList
 import com.example.khyku.yh.userDB.UserProfile
@@ -95,7 +96,8 @@ fun UserProfileScreen() {
     val selectedEvent = { user: UserProfile -> selectedUser = user }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        ProfileScreen(viewModel = viewModel, selectedUser)
+        InputScreen(viewModel = viewModel, selectedUser)
+        ProfileScreen()
         UserList(list = userlist, onClick = selectedEvent)
     }
 }
