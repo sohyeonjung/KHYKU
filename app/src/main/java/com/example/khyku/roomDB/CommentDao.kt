@@ -19,5 +19,4 @@ interface CommentDao {
     fun getAllItems(): Flow<List<Comment>>
 
 
-
 }

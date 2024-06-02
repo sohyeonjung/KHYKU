@@ -54,14 +54,6 @@ class PostViewModel(private val postRepository:PostRepository):ViewModel(){
             }
         }
     }
-//    fun getItem(postId: Int): Flow<Post?> {
-//        return flow {
-//            val post = postRepository.getItem(postId)
-//            emit(post)
-//        }
-//    }
-
-
 
 
 

@@ -33,14 +33,23 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.khyku.roomDB.CommentDatabase
 import com.example.khyku.roomDB.Post
+import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.viewmodel.CommentRepository
 import com.example.khyku.viewmodel.CommentViewModel
 import com.example.khyku.viewmodel.CommentViewModelFactory
-
+import com.example.khyku.viewmodel.PostRepository
+import com.example.khyku.viewmodel.PostViewModel
+import com.example.khyku.viewmodel.PostViewModelFactory
 
 @ExperimentalMaterial3Api
 @Composable
-fun PostDetailScreen(post:Post, navController: NavController) {
+fun PostDetailScreen(
+    navController: NavController,
+    postTitle: String?,
+    postContents: String?,
+    postType: String?,
+    postId: String?
+) {
 
     val KonkukGreen = Color(0xFF036B3F)
 
@@ -52,18 +61,16 @@ fun PostDetailScreen(post:Post, navController: NavController) {
 
     val commentlist by commentviewModel.commentList.collectAsState(initial = emptyList())
 
-//    val postdb = PostDatabase.getPostDatabase(context)
-//    val postviewModel: PostViewModel =
-//        viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
-//
-//    val postlist by commentviewModel.commentList.collectAsState(initial = emptyList())
-
+    val postdb = PostDatabase.getPostDatabase(context)
+    val postviewModel: PostViewModel =
+        viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
 
     var showCommentDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         commentviewModel.getAllItems()
     }
+    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
 
     Column (
         modifier = Modifier
@@ -94,7 +101,7 @@ fun PostDetailScreen(post:Post, navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
-            Text(text = post.postTitle,
+            Text(text = postTitle.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp),
@@ -102,14 +109,14 @@ fun PostDetailScreen(post:Post, navController: NavController) {
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(text=post.postType,
+            Text(text= postType.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp),
                 color = Color.Black,
                 fontSize = 15.sp
             )
-            Text(text = post.postContents,
+            Text(text = postContents.toString() + "/n아이디"+postId.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 10.dp, bottom = 10.dp),

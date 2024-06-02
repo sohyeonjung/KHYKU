@@ -38,13 +38,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val navController = rememberNavController()
                     //MainScreen()
                     //CommunityScreen()
 //                    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj",
-//                        "programming",true, getCurrentTime()
-//                    )
-//                    PostDetailScreen(post = post)
-                    val navController = rememberNavController()
+//                        "programming",true, getCurrentTime() )
+
+                    //PostDetailScreen(2, navController)
+
                     NavGraph(navController = navController)
 
                 }

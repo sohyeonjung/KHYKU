@@ -46,6 +46,8 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommunityScreen(navController: NavHostController) {
+
+
     val context = LocalContext.current
     val postdb = PostDatabase.getPostDatabase(context)
     val viewModel: PostViewModel =
@@ -53,8 +55,16 @@ fun CommunityScreen(navController: NavHostController) {
 
     val postlist by viewModel.postList.collectAsState()
 
+    var selectedPostTitle by remember { mutableStateOf("") }
+    var selectedPostId by remember { mutableStateOf("") }
+    var selectedPostType by remember { mutableStateOf("")}
+    var selectedPostTime by remember { mutableStateOf("") }
+    var selectedPostDone by remember { mutableStateOf(false) }
+    var selectedPostContents by remember { mutableStateOf("") }
+
     LaunchedEffect(key1 = true) {
         viewModel.getAllItems()
+
     }
 
 
@@ -94,6 +104,9 @@ fun CommunityScreen(navController: NavHostController) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            Text(
+                text = "선택된 게시물: $selectedPostTitle (ID: $selectedPostId)"
+            )
             Row {
                 TextField(
                     value = searchText,
@@ -134,8 +147,14 @@ fun CommunityScreen(navController: NavHostController) {
 
             PostList(
                 list = postlist
-            ) {
-                //navigate써야함
+            ) { it ->
+                selectedPostId=it.postId.toString()
+                selectedPostTitle=it.postTitle
+                selectedPostDone=it.postDone
+                selectedPostTime=it.postTime
+                selectedPostContents=it.postContents
+                selectedPostType=it.postType
+                navController.navigate("Post/$selectedPostTitle/$selectedPostContents/$selectedPostType/$selectedPostId")
             }
         }
 

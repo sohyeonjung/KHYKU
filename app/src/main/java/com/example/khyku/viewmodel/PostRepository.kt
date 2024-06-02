@@ -21,6 +21,8 @@ class PostRepository(private val db: PostDatabase) {
 
     fun getAllItems() = dao.getAllItems()
     fun getItems(itemName:String) = dao.getItems("$itemName%") //like하기 위해서
-    fun getItem(postId:Int) = dao.getItem(postId)
+
+
+
 
 }

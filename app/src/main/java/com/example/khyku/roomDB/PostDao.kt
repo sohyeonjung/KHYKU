@@ -24,9 +24,6 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE postTitle like :postName") //포함된다면
     fun getItems(postName: String): Flow<List<Post>>
 
-    //    @Query("SELECT * FROM posts WHERE postTitle == postId")
-//    fun getItem(postId:Int) : Flow<List<Post>>
-    @Query("SELECT * FROM posts WHERE postId = :postId")
-    fun getItem(postId: Int): Post
+
 
 }

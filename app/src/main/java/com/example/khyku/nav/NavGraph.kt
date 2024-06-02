@@ -5,8 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.screen.CommunityScreen
 import com.example.khyku.screen.PostDetailScreen
@@ -31,8 +33,37 @@ fun NavGraph(navController: NavHostController) {
         composable(route = Routes.InputPost.route){
             PostInputScreen(viewModel = postviewModel, navController = navController)
         }
-        composable("Post/{postId}"){ backStackEntry->
-            PostDetailScreen(backStackEntry.arguments?.getInt("postId"),navController)
+        composable(route = "Post/{postTitle}/{postContents}/{postType}/{postId}",
+            arguments = listOf(
+                navArgument("postTitle"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("postContents"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("postType"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("postId"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+
+        ){
+            PostDetailScreen(navController = navController,
+                postTitle = it.arguments?.getString("postTitle") ,
+                postContents = it.arguments?.getString("postContents"),
+                postType = it.arguments?.getString("postType"),
+                postId = it.arguments?.getString("postId")
+            )
         }
     }
 }
