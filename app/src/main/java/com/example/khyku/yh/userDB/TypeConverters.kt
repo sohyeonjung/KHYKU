@@ -11,19 +11,6 @@ import java.time.format.DateTimeParseException
 
 class Converters {
     private val gson = Gson()
-
-    // map converter 사용 아직 X
-    @TypeConverter
-    fun mapToString(value: MutableMap<String, Duration>): String {
-        return gson.toJson(value)
-    }
-
-    @TypeConverter
-    fun stringToMap(value: String): MutableMap<String, Duration> {
-        val mapType = object : TypeToken<MutableMap<String, Duration>>() {}.type
-        return gson.fromJson(value, mapType)
-    }
-
     @TypeConverter
     fun fromDuration(value: Duration?): Long? {
         return value?.toMillis()
@@ -49,4 +36,15 @@ class Converters {
             null
         }
     }
+//    map converter 사용 X
+//    @TypeConverter
+//    fun mapToString(value: MutableMap<String, Duration>): String {
+//        return gson.toJson(value)
+//    }
+//
+//    @TypeConverter
+//    fun stringToMap(value: String): MutableMap<String, Duration> {
+//        val mapType = object : TypeToken<MutableMap<String, Duration>>() {}.type
+//        return gson.fromJson(value, mapType)
+//    }
 }

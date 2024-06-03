@@ -4,6 +4,7 @@ package com.example.khyku.yh.userViewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,4 +116,35 @@ class UserProfileViewModel(private val repository: Repository) : ViewModel() {
             }
         }
     }
+    // subjectName => Subject 객체로 전환 필요
+    fun updateSubjectStudyTime(user: UserProfile?, subjectName: String) {
+        user?.let {
+            val existingSubject = it.subjects.find { it.name == subjectName }
+            val addSubjectDuration = Duration.between(user.lastStudyTime, user.studyEndTime)
+            if (existingSubject != null) {
+                existingSubject.time = existingSubject.time.plus(addSubjectDuration)
+            } else {
+                val newSubject = Subject(subjectName,"a",addSubjectDuration,true)
+                it.subjects += newSubject
+            }
+        }
+    }
+
 }
+
+//    fun updateStatusMessage(newMessage: String) {
+//        statusMessage = newMessage
+//    }
+//    var mainSubject: String = ""
+//        get() = field
+//        set(value) {
+//            if (subjects.size < 3 || subjects.containsKey(value)) {
+//                field = value
+//                // new main subject 초기화
+//                subjects.putIfAbsent(value, Duration.ZERO)
+//            } else {
+//                throw IllegalStateException("3 main subjects")
+//            }
+//        }
+//    val mainSubjectStudyTotal: Duration
+//        get() = subjects[mainSubject] ?: Duration.ZERO

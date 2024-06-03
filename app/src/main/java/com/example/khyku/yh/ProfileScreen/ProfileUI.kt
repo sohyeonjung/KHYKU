@@ -37,5 +37,13 @@ fun ProfileUI(user: UserProfile, onClick: (user:UserProfile) -> Unit) {
         Text(user.maxFocusTime.toString(), fontSize = 15.sp)
         Text(user.studyStartTime.toString(), fontSize = 15.sp)
         Text(user.studyEndTime.toString(), fontSize = 15.sp)
+        if (user.subjects.isNotEmpty()) {
+            Text("Subjects:", fontSize = 15.sp)
+            user.subjects.forEach { subject ->
+                Text(subject.name, fontSize = 15.sp)
+            }
+        } else {
+            Text("No subjects", fontSize = 15.sp)
+        }
     }
 }
