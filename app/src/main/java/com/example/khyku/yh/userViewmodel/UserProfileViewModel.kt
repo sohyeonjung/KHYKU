@@ -9,13 +9,12 @@ import com.example.khyku.yh.userDB.UserProfile
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalTime
 
-// 과목, 과목별 총 공부량, main subject로 선정된 여부
-// update를 쳐하면 모든게 null로 쳐바뀜 => update UI 완성 후에 쪼개서 추가
-class ViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
+class UserProfileViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserProfileViewModel::class.java)) {
             return UserProfileViewModel(repository) as T
@@ -130,6 +129,43 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
         }
     }
 
+    // 로그인 - ID 일치
+    fun checkUserId(userStudentId: Long, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val user = repository.getUserById(userStudentId).firstOrNull()
+            callback(user != null)
+        }
+    }
+
+    // 로그인 - 비밀번호 일치
+    fun checkUserPassword(userStudentId: Long, password: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val user = repository.getUserById(userStudentId).firstOrNull()
+            callback(user?.userPassword == password)
+        }
+    }
+
+    // 회원가입 - ID 중복
+    fun checkDuplicateUserId(userStudentId: Long, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val user = repository.getUserById(userStudentId).firstOrNull()
+            callback(user != null)
+        }
+    }
+
+    // 회원가입 - 사용자 프로필 삽입
+    fun registerUserProfile(user: UserProfile, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                repository.InsertUser(user)
+                getAllUserProfile()
+                callback(true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                callback(false)
+            }
+        }
+    }
 }
 
 //    fun updateStatusMessage(newMessage: String) {

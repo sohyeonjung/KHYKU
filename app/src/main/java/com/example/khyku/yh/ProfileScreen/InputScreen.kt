@@ -59,13 +59,13 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
 
         Row {
             Button(onClick = {
-                viewModel.InsertUserProfile(UserProfile(userId.toLong(), userName))
+                viewModel.InsertUserProfile(UserProfile(userId.toLong(), userName,"",""))
                 clearText()
             }) {
                 Text("Insert")
             }
             Button(onClick = {
-                viewModel.DeleteUserProfile(UserProfile(userId.toLong(), userName))
+                viewModel.DeleteUserProfile(UserProfile(userId.toLong(), userName,"",""))
                 clearText()
             }) {
                 Text("Delete")
