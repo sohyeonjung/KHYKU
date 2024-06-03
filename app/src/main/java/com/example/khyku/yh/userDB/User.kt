@@ -11,7 +11,7 @@ import java.time.LocalTime
 data class UserProfile (
     // id -> Long
     @PrimaryKey(autoGenerate = false)
-    val userStudentId: Long = 202211341,
+    val userStudentId: Long = 202211341L,
     var userName: String
 ) {
     var passWd: String? = null

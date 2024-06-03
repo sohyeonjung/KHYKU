@@ -34,6 +34,7 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
     fun clearText() {
         userId = ""
         userName = ""
+        subjectName = ""
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -52,7 +53,7 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
         TextField(
             value = subjectName,
             onValueChange = { subjectName = it },
-            label = { Text("subjectName") },
+            label = { Text("SubjectName") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -82,11 +83,11 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
                     val localtime = LocalTime.now()
                     viewModel.endStudySession(selectedUser, localtime)
                     viewModel.updateSubjectStudyTime(selectedUser, subjectName)
+                    subjectName = "" // clear subject name after updating study time
                 }
             }) {
                 Text("End")
             }
         }
-
     }
 }
