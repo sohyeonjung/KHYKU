@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalTime
 
-// update를 쳐하면 모든게 null로 쳐바뀜 
+// 과목, 과목별 총 공부량, main subject로 선정된 여부
+// update를 쳐하면 모든게 null로 쳐바뀜
 class ViewModelFactory(private val repository: Repository): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserProfileViewModel::class.java)) {

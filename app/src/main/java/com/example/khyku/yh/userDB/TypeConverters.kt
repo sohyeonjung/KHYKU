@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException
 class Converters {
     private val gson = Gson()
 
+    // map converter 사용 아직 X
     @TypeConverter
     fun mapToString(value: MutableMap<String, Duration>): String {
         return gson.toJson(value)

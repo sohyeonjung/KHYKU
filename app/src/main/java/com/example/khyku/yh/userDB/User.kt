@@ -19,7 +19,8 @@ data class UserProfile (
     var lastStudyTime: LocalTime? = null
     var studyEndTime: LocalTime? = null
     var statusMessage: String? = null
-    var subjects: MutableMap<String, Duration> = mutableMapOf()
+    lateinit var subjects:List<Subject> // home에서 subject추가 -> update
+    lateinit var mainSubjects: List<Subject>
 }
 
 //    fun updateSubjectStudyTime(now: LocalTime, subject:String) {
