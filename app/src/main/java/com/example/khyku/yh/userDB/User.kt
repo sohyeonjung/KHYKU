@@ -10,7 +10,8 @@ import java.time.LocalTime
 @Entity(tableName = "user_profiles")
 data class UserProfile (
     // id -> Long
-    @PrimaryKey(autoGenerate = false) val id: String = "user0",
+    @PrimaryKey(autoGenerate = false)
+    val userStudentId: Long = 202211341,
     var userName: String
 ) {
     var passWd: String? = null

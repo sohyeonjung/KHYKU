@@ -32,7 +32,7 @@ fun ProfileUI(user: UserProfile, onClick: (user:UserProfile) -> Unit) {
         .padding(10.dp)
         .fillMaxWidth()
         .clickable { onClick(user) }){ //onclick 함수를 실행함
-        Text(user.id, fontSize = 15.sp)
+        Text(user.userStudentId.toString(), fontSize = 15.sp)
         Text(user.userName, fontSize = 15.sp)
         Text(user.maxFocusTime.toString(), fontSize = 15.sp)
         Text(user.studyStartTime.toString(), fontSize = 15.sp)

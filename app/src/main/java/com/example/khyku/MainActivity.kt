@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.compose.rememberNavController
-import com.example.khyku.nav.NavGraph
 import com.example.khyku.roomDB.Post
 import com.example.khyku.roomDB.PostDatabase
 import com.example.khyku.screen.PostInputScreen
@@ -35,10 +34,9 @@ import com.example.khyku.yh.ProfileScreen.UserList
 import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userDB.UserProfileDatabase
-import com.example.khyku.yh.userViewmodel.Repository
+import com.example.khyku.yh.userViewmodel.UserRepository
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 import com.example.khyku.yh.userViewmodel.ViewModelFactory
-import java.time.Duration
 
 
 @ExperimentalMaterial3Api
@@ -91,7 +89,7 @@ fun UserProfileScreen() {
     val context = LocalContext.current
     val userdb = UserProfileDatabase.getUserProfileDatabase(context)
     val viewModel: UserProfileViewModel =
-        viewModel(factory = ViewModelFactory(Repository(userdb)))
+        viewModel(factory = ViewModelFactory(UserRepository(userdb)))
 
     val userlist by viewModel.userList.collectAsState(initial = emptyList()) //~해서 자동으로 화면 recomposition
     var selectedUser: UserProfile? by remember {

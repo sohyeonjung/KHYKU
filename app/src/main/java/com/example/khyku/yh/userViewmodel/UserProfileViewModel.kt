@@ -15,7 +15,7 @@ import java.time.LocalTime
 
 // 과목, 과목별 총 공부량, main subject로 선정된 여부
 // update를 쳐하면 모든게 null로 쳐바뀜 => update UI 완성 후에 쪼개서 추가
-class ViewModelFactory(private val repository: Repository): ViewModelProvider.Factory{
+class ViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserProfileViewModel::class.java)) {
             return UserProfileViewModel(repository) as T
@@ -23,7 +23,7 @@ class ViewModelFactory(private val repository: Repository): ViewModelProvider.Fa
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-class UserProfileViewModel(private val repository: Repository) : ViewModel() {
+class UserProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private var _userList = MutableStateFlow<List<UserProfile>>(emptyList())
     val userList = _userList.asStateFlow()
 

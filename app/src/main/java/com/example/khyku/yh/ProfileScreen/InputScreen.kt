@@ -26,7 +26,7 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
 
     LaunchedEffect(selectedUser) {
         selectedUser?.let {
-            userId = it.id
+            userId = it.userStudentId.toString()
             userName = it.userName
         }
     }
@@ -58,13 +58,13 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
 
         Row {
             Button(onClick = {
-                viewModel.InsertUserProfile(UserProfile(userId, userName))
+                viewModel.InsertUserProfile(UserProfile(userId.toLong(), userName))
                 clearText()
             }) {
                 Text("Insert")
             }
             Button(onClick = {
-                viewModel.DeleteUserProfile(UserProfile(userId, userName))
+                viewModel.DeleteUserProfile(UserProfile(userId.toLong(), userName))
                 clearText()
             }) {
                 Text("Delete")
