@@ -9,6 +9,7 @@ import java.time.LocalTime
 // simple Date Format
 @Entity(tableName = "user_profiles")
 data class UserProfile (
+    // id -> Long
     @PrimaryKey(autoGenerate = false) val id: String = "user0",
     var userName: String
 ) {
