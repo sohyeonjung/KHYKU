@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +51,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.R
 import com.example.khyku.User.Subject
 import com.example.khyku.User.User
-import com.google.ads.interactivemedia.pal.utils.Duration
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,14 +72,13 @@ class UserViewModel: ViewModel(){
         //not use add
         user.value = user.value.copy(subjects = updateSubject)
     }
-    fun timeUpdate(time:Duration){
 
-    }
     fun changeTimerActive(){
         timerActive.value = !timerActive.value
     }
-
-    private val _timer = MutableStateFlow(0L)
+    /*************************************************************/
+    private val _timer = MutableStateFlow(selectedSub.time)
+    /*************************************************************/
     val timer = _timer.asStateFlow()
 
     private var timerJob: Job? = null
@@ -96,6 +98,8 @@ class UserViewModel: ViewModel(){
     }
 
     fun stopTimer() {
+        selectedSub.time += _timer.value
+        user.value.totalTime += _timer.value
         _timer.value = 0
         timerJob?.cancel()
     }
@@ -193,15 +197,15 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
                 }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                 }
-            }
+            },
         ) {
             Box(Modifier.padding(it)) {
                 when {
-                    userViewModel.user.value.totalTime == 0 -> {
-                        HomeScreenInit()
+                    userViewModel.user.value.totalTime == 0L -> {
+                        HomeScreenInit(userViewModel)
                     }
                     userViewModel.user.value.totalTime > 0 -> {
-                        HomeScreenHaveTime()
+                        HomeScreenHaveTime(userViewModel)
                     }
                 }
                 if (showBottomSheet) {
@@ -217,7 +221,7 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
         }
     }
     else{
-        HomeScreenActive()
+        HomeScreenActive(userViewModel)
     }
 
 }
@@ -234,15 +238,20 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "취소", modifier = Modifier.clickable { onClose() })
+            Text(text = "취소", modifier = Modifier.weight(1f).clickable { onClose() })
             Text(
                 text = "과목 추가하기",
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
             )
             Text(text = "완료", modifier = Modifier.clickable {
-                userViewModel.addSubject(Subject(name = subjectName, cate = subjectCate, time = 0))
-                onClose()
+                if(subjectName == ""){
+                    //subjectNoInputAlert()
+                }
+                else{
+                    userViewModel.addSubject(Subject(name = subjectName, cate = subjectCate, time = 0))
+                    onClose()
+                }
             })
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -309,13 +318,59 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
     }
 }
 
+
+
 @Composable
-fun HomeScreenHaveTime() {
-    TODO("Not yet implemented")
+fun HomeScreenHaveTime(userViewModel: UserViewModel) {
+    Column {
+        Column(
+            modifier = Modifier
+                .background(colorResource(id = R.color.KUGrenn)),
+            Arrangement.Top,
+            Alignment.CenterHorizontally
+        ){
+            Spacer(modifier = Modifier.height(24.dp))
+            DateField()
+            Spacer(modifier = Modifier.height(40.dp))
+            //TimerField(userViewModel)
+            //Spacer(modifier = Modifier.height(30.dp))
+            DropDownBoxField(userViewModel)
+            Spacer(modifier = Modifier.height(28.dp))
+            //TimerButtonField(userViewModel)
+            TimerScreenContent(userViewModel)
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+        LazyColumn (modifier = Modifier.background(Color.White)){
+            items(userViewModel.user.value.subjects){ item ->
+                if(item.time>0L) {
+                    ItemUI(item)
+                    Divider(color = colorResource(id = R.color.KUGrenn))
+                }
+            }
+        }
+    }
+
 }
 
 @Composable
-fun HomeScreenActive(userViewModel: UserViewModel = viewModel()) {
+fun ItemUI(item: Subject) {
+    Row(modifier = Modifier.padding(10.dp)) {
+        Spacer(modifier = Modifier.width(15.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_circle_24),
+            tint = Color(android.graphics.Color.parseColor(item.cate)),
+            contentDescription = "",
+
+        )
+        Spacer(modifier = Modifier.width(30.dp))
+        Text(text = item.name, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.width(30.dp))
+        Text(text = item.time.formatTime())
+    }
+}
+
+@Composable
+fun HomeScreenActive(userViewModel: UserViewModel) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.KUGrenn)), Arrangement.Top, Alignment.CenterHorizontally) {
@@ -330,7 +385,7 @@ fun HomeScreenActive(userViewModel: UserViewModel = viewModel()) {
 }
 
 @Composable
-fun HomeScreenInit(userViewModel: UserViewModel = viewModel()) {
+fun HomeScreenInit(userViewModel: UserViewModel) {
     Column(modifier = Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally){
         Spacer(modifier = Modifier.height(24.dp))
         DateField()
@@ -338,7 +393,7 @@ fun HomeScreenInit(userViewModel: UserViewModel = viewModel()) {
         //TimerField(userViewModel)
         //Spacer(modifier = Modifier.height(30.dp))
         DropDownBoxField(userViewModel)
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         //TimerButtonField(userViewModel)
         TimerScreenContent(userViewModel)
     }
@@ -354,15 +409,15 @@ fun DateField() {
     Text(formatted, fontSize = 17.sp)
 }
 
-@Composable
-fun TimerField(userViewModel: UserViewModel) {
-    var time = userViewModel.selectedSub.time
-    var hour:Int = time/(60*60*100)
-    var minute:Int = time/(60*100)
-    var second:Int = time/100
-
-    Text("00:00:00", fontSize = 50.sp, fontWeight = FontWeight.Bold)
-}
+//@Composable
+//fun TimerField(userViewModel: UserViewModel) {
+//    var time = userViewModel.selectedSub.time
+//    var hour:Int = time/(60*60*100)
+//    var minute:Int = time/(60*100)
+//    var second:Int = time/100
+//
+//    Text("00:00:00", fontSize = 50.sp, fontWeight = FontWeight.Bold)
+//}
 
 @Composable
 fun DropDownBoxField(userViewModel: UserViewModel) {
@@ -462,13 +517,13 @@ fun TimerScreen(
 //        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if(!userViewModel.timerActive.value){
+        if(!userViewModel.timerActive.value && userViewModel.user.value.totalTime == 0L){
             Text(text = timerValue.formatTime(), fontSize = 24.sp)
         }
         else{
             Text(text = timerValue.formatTime(), fontSize = 24.sp, color = Color.White)
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(35.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -485,39 +540,77 @@ fun TimerScreen(
 //                Text("Stop")
 //            }
 
+            var containerColor:Color
+            var contentColor:Color
+            var onClick: ()->Unit
+            var buttonText: String
+
             if(!userViewModel.timerActive.value){
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.KUGrenn),
-                        contentColor = Color.White,
-                        disabledContainerColor = Color.LightGray,
-                        disabledContentColor = Color.White,
-                    ),
-                    onClick = {
-                        userViewModel.timerActive.value = !userViewModel.timerActive.value
-                        userViewModel.startTimer()
-                    }
-                ) {
-                    Text(text = "공부 시작")
+                onClick = {userViewModel.startTimer()}
+                buttonText = "공부 시작"
+
+                if(userViewModel.user.value.totalTime == 0L){
+                    containerColor = colorResource(id = R.color.KUGrenn)
+                    contentColor = Color.White
+                }
+                else{
+                    containerColor = Color.White
+                    contentColor = colorResource(id = R.color.KUGrenn)
                 }
             }
             else{
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.White,
-                        contentColor = colorResource(id = R.color.KUGrenn),
-                        disabledContainerColor = Color.LightGray,
-                        disabledContentColor = Color.White,
-                    ),
-                    onClick = {
-                        userViewModel.timerActive.value = !userViewModel.timerActive.value
-                        userViewModel.stopTimer()
-                    }
-                ) {
-                    Text(text = "중지")
-                }
+                containerColor = Color.White
+                contentColor = colorResource(id = R.color.KUGrenn)
+                onClick = {userViewModel.stopTimer()}
+                buttonText = "중지"
             }
 
+//            if(!userViewModel.timerActive.value){
+//                Button(
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = colorResource(id = R.color.KUGrenn),
+//                        contentColor = Color.White,
+//                        disabledContainerColor = Color.LightGray,
+//                        disabledContentColor = Color.White,
+//                    ),
+//                    onClick = {
+//                        userViewModel.timerActive.value = !userViewModel.timerActive.value
+//                        userViewModel.startTimer()
+//                    }
+//                ) {
+//                    Text(text = "공부 시작")
+//                }
+//            }
+//            else{
+//                Button(
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = Color.White,
+//                        contentColor = colorResource(id = R.color.KUGrenn),
+//                        disabledContainerColor = Color.LightGray,
+//                        disabledContentColor = Color.White,
+//                    ),
+//                    onClick = {
+//                        userViewModel.timerActive.value = !userViewModel.timerActive.value
+//                        userViewModel.stopTimer()
+//                    }
+//                ) {
+//                    Text(text = "중지")
+//                }
+//            }
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = containerColor,
+                    contentColor = contentColor,
+                    disabledContainerColor = Color.LightGray,
+                    disabledContentColor = containerColor,
+                ),
+                onClick = {
+                    userViewModel.timerActive.value = !userViewModel.timerActive.value
+                    onClick()
+                }
+            ) {
+                Text(text = buttonText)
+            }
         }
     }
 }

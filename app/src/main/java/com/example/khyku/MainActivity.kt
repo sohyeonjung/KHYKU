@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.khyku.Nav.NavGraph
 import com.example.khyku.ui.theme.KHYKUTheme
@@ -35,8 +36,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    var navBackStackEntry = navController.currentBackStackEntryAsState()
+    var isBottomBarVisible = true
+
+    navBackStackEntry.value?.destination?.route.let{ route ->
+        isBottomBarVisible = when(route){
+            "Home" -> true
+            "Profile" -> true
+            else -> false
+        }
+    }
+
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) },
+        bottomBar = {
+            if(isBottomBarVisible)
+                BottomNavigationBar(navController = navController)
+        },
 
     ) {
         Box(Modifier.padding(it)){
