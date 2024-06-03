@@ -16,6 +16,7 @@ data class UserProfile (
     var todayStudyTime: Duration = Duration.ZERO
     var maxFocusTime: Duration = Duration.ZERO
     var studyStartTime: LocalTime? = null
+    var lastStudyTime: LocalTime? = null
     var studyEndTime: LocalTime? = null
     var statusMessage: String? = null
     var subjects: MutableMap<String, Duration> = mutableMapOf()

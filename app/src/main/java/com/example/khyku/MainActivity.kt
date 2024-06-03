@@ -29,7 +29,7 @@ import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
 import com.example.khyku.yh.ProfileScreen.InputScreen
-import com.example.khyku.yh.ProfileScreen.ProfileScreen
+//import com.example.khyku.yh.ProfileScreen.ProfileScreen
 import com.example.khyku.yh.ProfileScreen.UserList
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userDB.UserProfileDatabase
@@ -49,15 +49,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    //MainScreen()
-                    //CommunityScreen()
-//                    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj",
-//                        "programming",true, getCurrentTime() )
-
-                    //PostDetailScreen(2, navController)
-
-                    NavGraph(navController = navController)
+//                    val navController = rememberNavController()
+//                    //MainScreen()
+//                    //CommunityScreen()
+////                    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj",
+////                        "programming",true, getCurrentTime() )
+//
+//                    //PostDetailScreen(2, navController)
+//
+//                    NavGraph(navController = navController)
 
                     UserProfileScreen()                }
             }
@@ -97,7 +97,7 @@ fun UserProfileScreen() {
 
     Column(modifier = Modifier.fillMaxSize()) {
         InputScreen(viewModel = viewModel, selectedUser)
-        ProfileScreen()
+        //ProfileScreen()
         UserList(list = userlist, onClick = selectedEvent)
     }
 }

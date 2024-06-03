@@ -80,10 +80,13 @@ class UserProfileViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun startStudySession(user: UserProfile?, startTime: LocalTime) {
-        if (user != null && user.studyStartTime == null) {
+        if (user != null ) {
             viewModelScope.launch {
                 try {
-                    user.studyStartTime = startTime
+                    if(user.studyStartTime == null) {
+                        user.studyStartTime = startTime
+                    }
+                    user.lastStudyTime = startTime
                     repository.UpdateUser(user)
                 } catch (e: Exception) {
                     // 예외 처리
@@ -98,7 +101,7 @@ class UserProfileViewModel(private val repository: Repository) : ViewModel() {
             viewModelScope.launch {
                 try {
                     user.studyEndTime = endTime
-                    val sessionDuration = Duration.between(user.studyStartTime, endTime)
+                    val sessionDuration = Duration.between(user.lastStudyTime, endTime)
                     if (sessionDuration > user.maxFocusTime) {
                         user.maxFocusTime = sessionDuration
                     }
