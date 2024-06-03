@@ -29,13 +29,16 @@ import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
 import com.example.khyku.yh.ProfileScreen.InputScreen
+import com.example.khyku.yh.ProfileScreen.ProfileScreen
 //import com.example.khyku.yh.ProfileScreen.ProfileScreen
 import com.example.khyku.yh.ProfileScreen.UserList
+import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userDB.UserProfileDatabase
 import com.example.khyku.yh.userViewmodel.Repository
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 import com.example.khyku.yh.userViewmodel.ViewModelFactory
+import java.time.Duration
 
 
 @ExperimentalMaterial3Api
@@ -59,7 +62,8 @@ class MainActivity : ComponentActivity() {
 //
 //                    NavGraph(navController = navController)
 
-                    UserProfileScreen()                }
+                    UserProfileScreen()
+                }
             }
         }
     }
@@ -94,10 +98,12 @@ fun UserProfileScreen() {
         mutableStateOf<UserProfile?>(null)
     }
     val selectedEvent = { user: UserProfile -> selectedUser = user }
-
+    val subjectExample = selectedUser?.let { Subject("DB","pink", it.maxFocusTime,true) }
     Column(modifier = Modifier.fillMaxSize()) {
         InputScreen(viewModel = viewModel, selectedUser)
-        //ProfileScreen()
+        if (subjectExample != null) {
+            ProfileScreen(viewModel = viewModel, selectedUser, subjectExample)
+        }
         UserList(list = userlist, onClick = selectedEvent)
     }
 }
