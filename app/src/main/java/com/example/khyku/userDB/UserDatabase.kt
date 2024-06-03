@@ -1,18 +1,16 @@
 // UserDatabase
-package com.example.khyku.yh.userDB
+package com.example.khyku.userDB
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 
 @Database(
     entities = [UserProfile::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
 abstract class UserProfileDatabase : RoomDatabase() {
     abstract fun getDao(): UserProfileDao
 

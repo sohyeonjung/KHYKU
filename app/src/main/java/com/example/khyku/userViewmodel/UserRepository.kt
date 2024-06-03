@@ -1,13 +1,13 @@
 // Repository
-package com.example.khyku.yh.userViewmodel
+package com.example.khyku.userViewmodel
 
-import com.example.khyku.yh.userDB.UserProfile
-import com.example.khyku.yh.userDB.UserProfileDatabase
+import com.example.khyku.userDB.UserProfile
+import com.example.khyku.userDB.UserProfileDatabase
 
 
 //UI와 repo를 나눠서 사용, viewmodel을 사용하여 viewmodel과 repository사이에 데이터를 구성받도록\
 //내장 db말고 외장(클라우드) db 사용하려면 repository만 수정하면 됨
-class Repository(private val db: UserProfileDatabase){
+class UserRepository(private val db: UserProfileDatabase){
     val dao = db.getDao()
 
     suspend fun InsertUser(user: UserProfile){
@@ -22,4 +22,6 @@ class Repository(private val db: UserProfileDatabase){
         dao.deleteUserProfile(user)
     }
     fun getAllUsers() = dao.getAllUserProfiles()
+
+
 }

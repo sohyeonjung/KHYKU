@@ -1,5 +1,5 @@
 // UserDao
-package com.example.khyku.yh.userDB
+package com.example.khyku.userDB
 
 import androidx.room.Dao
 import androidx.room.Delete
