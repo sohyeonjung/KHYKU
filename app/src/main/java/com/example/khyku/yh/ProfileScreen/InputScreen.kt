@@ -68,24 +68,24 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
             }) {
                 Text("Insert")
             }
-            Button(onClick = {
-                viewModel.UpdateUserProfile(UserProfile(userId, userName))
-                clearText()
-            }) {
-                Text("Update")
-            }
+//            Button(onClick = {
+//                viewModel.UpdateUserProfile(UserProfile(userId, userName))
+//                clearText()
+//            }) {
+//                Text("Update")
+//            }
             Button(onClick = {
                 viewModel.DeleteUserProfile(UserProfile(userId, userName))
                 clearText()
             }) {
                 Text("Delete")
             }
-            Button(onClick = {
-                viewModel.getAllUserProfile()
-                clearText()
-            }) {
-                Text("Find")
-            }
+//            Button(onClick = {
+//                viewModel.getAllUserProfile()
+//                clearText()
+//            }) {
+//                Text("Find")
+//            }
         }
         Row {
             Button(onClick = {

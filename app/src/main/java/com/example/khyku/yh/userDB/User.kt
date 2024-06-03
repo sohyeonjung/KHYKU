@@ -21,6 +21,5 @@ data class UserProfile (
     var statusMessage: String? = null
     // home에서 subject추가 -> update
     var subjects:List<Subject> = mutableListOf() // => isUserMain
-    // lateinit var mainSubjects: List<Subject>
 }
 

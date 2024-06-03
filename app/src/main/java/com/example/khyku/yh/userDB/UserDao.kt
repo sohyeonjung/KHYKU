@@ -13,8 +13,8 @@ interface UserProfileDao {
     @Insert
     suspend fun insertUserProfile(userProfile: UserProfile)
 
-    @Update
-    suspend fun updateUserProfile(userProfile: UserProfile)
+    //@Update
+    //suspend fun updateUserProfile(userProfile: UserProfile)
 
     @Delete
     suspend fun deleteUserProfile(userProfile: UserProfile)
