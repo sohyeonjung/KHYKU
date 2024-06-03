@@ -1,34 +1,38 @@
 package com.example.khyku.loginoutscreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.khyku.userDB.UserProfileDatabase
-import com.example.khyku.userViewmodel.UserProfileViewModel
-import com.example.khyku.userViewmodel.UserRepository
-import com.example.khyku.userViewmodel.UserViewModelFactory
 
 @ExperimentalMaterial3Api
 @Composable
 fun RegisterScreen(navController: NavController) {
 
-    val context = LocalContext.current
-    val userdb = UserProfileDatabase.getUserProfileDatabase(context)
-    val userviewModel:UserProfileViewModel =
-        viewModel(factory = UserViewModelFactory(UserRepository(userdb)))
+    val KonkukGreen = Color(0xFF036B3F)
+
+//    val context = LocalContext.current
+//    val userdb = UserProfileDatabase.getUserProfileDatabase(context)
+//    val userviewModel: UserProfileViewModel =
+//        viewModel(factory = UserViewModelFactory(UserRepository(userdb)))
 
     var studentId by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -37,41 +41,85 @@ fun RegisterScreen(navController: NavController) {
     var checkpassword by remember { mutableStateOf("") }
 
     var showalert by remember { mutableStateOf(false) }
+    var alertmsg by remember { mutableStateOf("") }
 
-    Column {
-        Text(text = "회원가입")
-        TextField(value = studentId, onValueChange = {studentId=it} )
-        TextField(value = name, onValueChange = {name=it})
-        TextField(value = major, onValueChange = {major=it} )
-        TextField(value = password, onValueChange = {password=it} )
-        TextField(value = checkpassword , onValueChange = {checkpassword=it} )
-        Button(onClick = {
-            if(true){ //학번 중복
-
-                showalert = true
-            }
-            else if(true){ //비밀번호 일치 안 함
-
-                showalert = true
-            }
-            else{ //모두 일치함
-                //TODO(navigate to main screen)
-            }
-
-            
-
-        }) {
-            Text(text = "회원가입")
+    Column(
+        modifier = Modifier
+            .background(KonkukGreen)
+            .fillMaxSize(),
+    ) {
+        Text(text = "회원가입", modifier = Modifier.padding(start=115.dp, top=100.dp, bottom=30.dp),
+            fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        TextField(
+            value = studentId, onValueChange = { studentId = it },
+            placeholder = { Text("학번", color = Color.Black) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+        )
+        TextField(
+            value = name, onValueChange = { name = it },
+            placeholder = { Text("이름", color = Color.Black) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+        )
+        TextField(
+            value = major, onValueChange = { major = it },
+            placeholder = { Text("전공", color = Color.Black) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+        )
+        TextField(
+            value = password, onValueChange = { password = it },
+            placeholder = { Text("비밀번호", color = Color.Black) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+        )
+        TextField(
+            value = checkpassword, onValueChange = { checkpassword = it },
+            placeholder = { Text("비밀번호 확인", color = Color.Black) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White
+            ),
+            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+        )
+        Button(
+            onClick = {
+                if (true) { //학번 중복
+                    showalert = true
+                    alertmsg="이미 존재하는 학번입니다."
+                } else if (password!=checkpassword) { //비밀번호 일치 안 함
+                    showalert = true
+                    alertmsg="비밀번호가 일치하지 않습니다."
+                } else { //모두 일치함
+                    //TODO(navigate to main screen)
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+            modifier = Modifier.padding(start=165.dp, bottom=30.dp)
+        ) {
+            Text(text = "회원가입", color = Color.Black)
         }
+
         if(showalert){
             AlertDialog(
                 onDismissRequest = { showalert=false },
-                title = { Text(text = "로그인 실패")},
-                confirmButton = { OutlinedButton(onClick = { showalert=false }) {
-                    Text("취소", color = Color.Black)
-                } }
+                title = { Text(text = alertmsg, color = Color.Black, fontWeight = FontWeight.Bold)},
+                confirmButton = { Button(onClick = { showalert=false },
+                    colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
+                    Text("취소", color = Color.White)
+                } },
+                containerColor = Color.White
             )
         }
+
 
     }
 }
