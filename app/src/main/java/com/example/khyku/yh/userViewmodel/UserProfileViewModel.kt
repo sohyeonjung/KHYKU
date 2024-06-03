@@ -41,19 +41,19 @@ class UserProfileViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-//    fun UpdateUserProfile(user: UserProfile?) {
-//        if (user != null) {
-//            viewModelScope.launch {
-//                try {
-//                    repository.UpdateUser(user)
-//                    getAllUserProfile()
-//                } catch (e: Exception) {
-//                    // 예외 처리
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
+    fun UpdateUserProfile(user: UserProfile?) {
+        if (user != null) {
+            viewModelScope.launch {
+                try {
+                    repository.UpdateUser(user)
+                    getAllUserProfile()
+                } catch (e: Exception) {
+                    // 예외 처리
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
 
     fun DeleteUserProfile(user: UserProfile?) {
         if (user != null) {
