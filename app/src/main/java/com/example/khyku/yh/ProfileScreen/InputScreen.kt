@@ -72,7 +72,7 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
             }
             Button(onClick = {
                 if (selectedUser != null) {
-                    val localtime = LocalTime.now()
+                    val localtime = LocalTime.now().toSecondOfDay().toLong()
                     viewModel.startStudySession(selectedUser, localtime)
                 }
             }) {
@@ -80,7 +80,7 @@ fun InputScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = nu
             }
             Button(onClick = {
                 if (selectedUser != null) {
-                    val localtime = LocalTime.now()
+                    val localtime = LocalTime.now().toSecondOfDay().toLong()
                     viewModel.endStudySession(selectedUser, localtime)
                     viewModel.updateSubjectStudyTime(selectedUser, subjectName)
                     subjectName = "" // clear subject name after updating study time

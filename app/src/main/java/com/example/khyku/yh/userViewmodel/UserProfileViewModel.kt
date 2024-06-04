@@ -81,7 +81,7 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
         }
     }
 
-    fun startStudySession(user: UserProfile?, startTime: LocalTime) {
+    fun startStudySession(user: UserProfile?, startTime: Long) {
         if (user != null ) {
             viewModelScope.launch {
                 try {
@@ -98,14 +98,16 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
         }
     }
 
-    fun endStudySession(user: UserProfile?, endTime: LocalTime) {
+    
+    // duration 연산 -> long 연산
+    fun endStudySession(user: UserProfile?, endTime: Long) {
         if (user?.studyStartTime != null) {
             viewModelScope.launch {
                 try {
                     user.studyEndTime = endTime
-                    val sessionDuration = Duration.between(user.lastStudyTime, endTime)
-                    if (sessionDuration > user.maxFocusTime) {
-                        user.maxFocusTime = sessionDuration
+                    val session = endTime - user.lastStudyTime
+                    if (session > user.maxFocusTime) {
+                        user.maxFocusTime = session
                     }
                     repository.UpdateUser(user)
                 } catch (e: Exception) {
@@ -119,11 +121,11 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
     fun updateSubjectStudyTime(user: UserProfile?, subjectName: String) {
         user?.let {
             val existingSubject = it.subjects.find { it.name == subjectName }
-            val addSubjectDuration = Duration.between(user.lastStudyTime, user.studyEndTime)
+            val addSubjectTime = user.studyEndTime - user.lastStudyTime
             if (existingSubject != null) {
-                existingSubject.time = existingSubject.time.plus(addSubjectDuration)
+                existingSubject.time += addSubjectTime
             } else {
-                val newSubject = Subject(subjectName,"a",addSubjectDuration,true)
+                val newSubject = Subject(subjectName,"a",addSubjectTime,true)
                 it.subjects += newSubject
             }
         }

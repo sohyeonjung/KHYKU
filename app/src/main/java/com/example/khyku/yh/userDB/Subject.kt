@@ -8,8 +8,8 @@ import java.time.Duration
 data class Subject(
     val name:String,
     val cate:String,
-//    var time:Int,
-    var time:Duration,
+    var time:Long,
+    //var time:Duration,
     var isUserMain:Boolean
 )
 
