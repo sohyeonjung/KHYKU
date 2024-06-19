@@ -1,11 +1,12 @@
-package com.example.khyku.Nav
+package com.example.khyku.nav
 
 
 sealed class Routes (val route: String) {
     object Home : Routes("Home")
-    object Profile : Routes("Profile")
-    object Ranking : Routes("Ranking")
-    object Notice : Routes("Notice")
     object Facility : Routes("Facility")
-    object Subject : Routes("Subject")
+    object Community : Routes("Community")
+    object InputPost : Routes("InputPost")
+    object Login : Routes("Login")
+    object Register : Routes("Register")
+
 }

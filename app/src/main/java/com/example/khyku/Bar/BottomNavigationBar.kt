@@ -1,12 +1,17 @@
 package com.example.khyku
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -15,7 +20,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun BottomNavigationBar(navController: NavController) {
 
-    NavigationBar {
+    NavigationBar(containerColor = colorResource(id = R.color.konkukgreen),
+        contentColor = colorResource(id = R.color.konkukgreen)) {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
 
@@ -39,7 +45,14 @@ fun BottomNavigationBar(navController: NavController) {
                 },
                 label = {
                     Text(text = navItem.title)
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = colorResource(id = R.color.BarUnselectedText),
+                    unselectedIconColor = colorResource(id = R.color.BarUnselectedText),
+                    indicatorColor = colorResource(id = R.color.BarGreen)
+                )
             )
         }
     }

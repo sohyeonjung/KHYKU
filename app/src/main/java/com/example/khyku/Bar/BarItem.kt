@@ -36,10 +36,10 @@ object NavBarItems{
             route = "Home"
         ),
         BarItem(
-            title = "Notice",
+            title = "Community",
             selectIcon = Icons.Default.List,
             onSelectedIcon = Icons.Outlined.List,
-            route = "Notice"
+            route = "Community"
         ),
         BarItem(
             title = "Facility",

@@ -1,4 +1,4 @@
-package com.example.khyku.screens
+package com.example.khyku.HomeScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,7 +64,7 @@ class UserViewModel: ViewModel(){
     var selectedSub:Subject
     var timerActive = mutableStateOf(false)
     init{
-        user = mutableStateOf<User>(User("dy", mutableListOf<Subject>(Subject("과목", "#589288", 0)), 0))
+        user = mutableStateOf<User>(User("dy", mutableListOf<Subject>(Subject("과목", "#589288", 0, true)), 0))
         selectedSub = user.value.subjects[0]
     }
     fun addSubject(sub:Subject) {
@@ -77,7 +77,7 @@ class UserViewModel: ViewModel(){
         timerActive.value = !timerActive.value
     }
     /*************************************************************/
-    private val _timer = MutableStateFlow(selectedSub.time)
+    private val _timer = MutableStateFlow(0L)
     /*************************************************************/
     val timer = _timer.asStateFlow()
 
@@ -191,11 +191,11 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
     if(!userViewModel.timerActive.value){
         Scaffold(
             floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    showBottomSheet = true
-
-                }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                FloatingActionButton(
+                    containerColor = colorResource(id = R.color.konkukgreen),
+                    onClick = { showBottomSheet = true }
+                ) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add", tint = Color.White)
                 }
             },
         ) {
@@ -238,7 +238,9 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "취소", modifier = Modifier.weight(1f).clickable { onClose() })
+            Text(text = "취소", modifier = Modifier
+                .weight(1f)
+                .clickable { onClose() })
             Text(
                 text = "과목 추가하기",
                 fontWeight = FontWeight.Bold,
@@ -249,7 +251,7 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
                     //subjectNoInputAlert()
                 }
                 else{
-                    userViewModel.addSubject(Subject(name = subjectName, cate = subjectCate, time = 0))
+                    userViewModel.addSubject(Subject(name = subjectName, cate = subjectCate, time = 0, false))
                     onClose()
                 }
             })
@@ -325,7 +327,7 @@ fun HomeScreenHaveTime(userViewModel: UserViewModel) {
     Column {
         Column(
             modifier = Modifier
-                .background(colorResource(id = R.color.KUGrenn)),
+                .background(colorResource(id = R.color.konkukgreen)),
             Arrangement.Top,
             Alignment.CenterHorizontally
         ){
@@ -344,7 +346,7 @@ fun HomeScreenHaveTime(userViewModel: UserViewModel) {
             items(userViewModel.user.value.subjects){ item ->
                 if(item.time>0L) {
                     ItemUI(item)
-                    Divider(color = colorResource(id = R.color.KUGrenn))
+                    Divider(color = colorResource(id = R.color.konkukgreen))
                 }
             }
         }
@@ -373,7 +375,7 @@ fun ItemUI(item: Subject) {
 fun HomeScreenActive(userViewModel: UserViewModel) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(colorResource(id = R.color.KUGrenn)), Arrangement.Top, Alignment.CenterHorizontally) {
+        .background(colorResource(id = R.color.konkukgreen)), Arrangement.Top, Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
         DateField()
         Spacer(modifier = Modifier.height(140.dp))
@@ -464,7 +466,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
 fun TimerButtonField(userViewModel: UserViewModel) {
     Button(
         colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(id = R.color.KUGrenn),
+            containerColor = colorResource(id = R.color.konkukgreen),
             contentColor = Color.White,
             disabledContainerColor = Color.LightGray,
             disabledContentColor = Color.White,
@@ -520,8 +522,15 @@ fun TimerScreen(
         if(!userViewModel.timerActive.value && userViewModel.user.value.totalTime == 0L){
             Text(text = timerValue.formatTime(), fontSize = 24.sp)
         }
-        else{
+        else if(userViewModel.timerActive.value){
             Text(text = timerValue.formatTime(), fontSize = 24.sp, color = Color.White)
+        }
+        else if(userViewModel.user.value.totalTime >0){
+            Text(userViewModel.user.value.totalTime.formatTime(), fontSize = 24.sp, color = Color.White)
+        }
+        if(userViewModel.timerActive.value){
+            Text(text = userViewModel.selectedSub.name, color = Color.White)
+            Text(text = (userViewModel.selectedSub.time + timerValue).formatTime(), fontSize = 24.sp, color = Color.White)
         }
         Spacer(modifier = Modifier.height(35.dp))
         Row(
@@ -550,17 +559,17 @@ fun TimerScreen(
                 buttonText = "공부 시작"
 
                 if(userViewModel.user.value.totalTime == 0L){
-                    containerColor = colorResource(id = R.color.KUGrenn)
+                    containerColor = colorResource(id = R.color.konkukgreen)
                     contentColor = Color.White
                 }
                 else{
                     containerColor = Color.White
-                    contentColor = colorResource(id = R.color.KUGrenn)
+                    contentColor = colorResource(id = R.color.konkukgreen)
                 }
             }
             else{
                 containerColor = Color.White
-                contentColor = colorResource(id = R.color.KUGrenn)
+                contentColor = colorResource(id = R.color.konkukgreen)
                 onClick = {userViewModel.stopTimer()}
                 buttonText = "중지"
             }
