@@ -23,13 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.khyku.nav.Routes
-import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel) {
-
+    // return UserProfile?
     val KonkukGreen = Color(0xFF036B3F)
 
     var id by remember{ mutableStateOf("") }
@@ -76,6 +75,7 @@ fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel) {
                                 showAlert = true
                             } else { //모두 일치함
                                 // TODO(navigate to main screen)
+                                //return viewModel.getUserById
                             }
                         }
                     }

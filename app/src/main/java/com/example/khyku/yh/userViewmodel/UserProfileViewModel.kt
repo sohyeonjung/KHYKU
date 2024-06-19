@@ -49,7 +49,6 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
     fun UpdateUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
