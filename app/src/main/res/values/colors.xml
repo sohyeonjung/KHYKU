@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="konkukgreen">#FF036B3F</color>
+    <color name="BarGreen">#3c8757</color>
+    <color name="BarUnselectedText">#d0edda</color>
 </resources>

@@ -24,13 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
-import com.example.khyku.yh.userDB.UserProfileDatabase
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
-import com.example.khyku.yh.userViewmodel.UserProfileViewModelFactory
-import com.example.khyku.yh.userViewmodel.UserRepository
 
 fun Long.formatTime(): String {
     val hours = this / 3600
@@ -285,11 +282,11 @@ fun Long.formatTime(): String {
 //}
 
 @Composable
-fun UserProfileScreen(userName: String) {
+fun UserProfileScreen(navController: NavController, viewModel: UserProfileViewModel, userName: String) {
     val context = LocalContext.current
-    val userdb = UserProfileDatabase.getUserProfileDatabase(context)
-    val viewModel: UserProfileViewModel =
-        viewModel(factory = UserProfileViewModelFactory(UserRepository(userdb)))
+    //val userdb = UserProfileDatabase.getUserProfileDatabase(context)
+    //val viewModel: UserProfileViewModel =
+    //    viewModel(factory = UserProfileViewModelFactory(UserRepository(userdb)))
 
     val userlist by viewModel.userList.collectAsState(initial = emptyList())
     var selectedUser by remember { mutableStateOf<UserProfile?>(null) }
