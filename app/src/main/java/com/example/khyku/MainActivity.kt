@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
 //                    NavGraph(navController = navController)
 
                     UserProfileScreen()
-                    val navController = rememberNavController()
-                    NavGraph(navController = navController)
+                    //val navController = rememberNavController()
+                    //NavGraph(navController = navController)
                 }
             }
         }

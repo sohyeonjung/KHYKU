@@ -34,7 +34,8 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
     val KonkukGreen = Color(0xFF036B3F)
     Column(
         modifier = Modifier
-            .background(color = KonkukGreen).fillMaxSize(),
+            .background(color = KonkukGreen)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (selectedUser != null) {
@@ -46,12 +47,14 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
                     .padding(top = 15.dp, start = 10.dp),
                 color = Color.White,
                 fontSize = 27.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
         }
         Column(
             modifier = Modifier
-                .background(color = Color.White).fillMaxWidth(),
+                .background(color = Color.White)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -59,14 +62,15 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
             ) {
                 if (selectedUser != null) {
                     Text(
-                        text = selectedUser.todayStudyTime.toString(),
+                        text = selectedUser.todayStudyTime.formatTime(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(70.dp)
                             .padding(top = 15.dp, start = 10.dp),
                         color = Color.Black,
                         fontSize = 27.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -89,18 +93,20 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
                                     .padding(top = 15.dp, start = 10.dp),
                                 color = Color.Black,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
                             )
                             if (selectedUser != null) {
                                 Text(
-                                    text = selectedUser.maxFocusTime.toString(),
+                                    text = selectedUser.maxFocusTime.formatTime(),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(70.dp)
                                         .padding(top = 15.dp, start = 10.dp),
                                     color = Color.Black,
                                     fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -113,26 +119,28 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
                         ) {
                             //Text(text = subject.name)
                             Text(
-                                text = "현재 과목",
+                                text = subject.name,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(70.dp)
                                     .padding(top = 15.dp, start = 10.dp),
                                 color = Color.Black,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
                             )
                             if (selectedUser != null) {
                                 Text(
                                     // subject의 공부시간으로 변경
-                                    text = selectedUser.maxFocusTime.toString(),
+                                    text = subject.time.formatTime(),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(70.dp)
                                         .padding(top = 15.dp, start = 10.dp),
                                     color = Color.Black,
                                     fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -151,18 +159,20 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
                                 .padding(top = 15.dp, start = 10.dp),
                             color = Color.Black,
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
                         )
                         if (selectedUser != null) {
                             Text(
-                                text = selectedUser.studyStartTime.toString(),
+                                text = selectedUser.studyStartTime.formatTime(),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(70.dp)
                                     .padding(top = 15.dp, start = 10.dp),
                                 color = Color.Black,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
@@ -175,38 +185,23 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
                                 .padding(top = 15.dp, start = 10.dp),
                             color = Color.Black,
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
                         )
                         if (selectedUser != null) {
                             Text(
-                                text = selectedUser.studyEndTime.toString(),
+                                text = selectedUser.studyEndTime.formatTime(),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(70.dp)
                                     .padding(top = 15.dp, start = 10.dp),
                                 color = Color.Black,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                if (selectedUser != null) {
-                    Text(
-                        text = selectedUser.statusMessage.toString(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(70.dp)
-                            .padding(top = 15.dp, start = 10.dp),
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
                 }
             }
             Row(
@@ -227,24 +222,28 @@ fun ProfileScreen(viewModel: UserProfileViewModel, selectedUser: UserProfile? = 
             selectedUser?.subjects?.let { subjects ->
                 Column(modifier = Modifier.padding(16.dp)) {
                     subjects.forEach { subject ->
-                        Text(
-                            text = subject.name,
-                            modifier = Modifier.fillMaxWidth()
-                                .height(70.dp)
-                                .padding(top = 15.dp, start = 10.dp),
-                            color = Color.Black,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                        Text(
-                            text = subject.time.toString(),
-                            modifier = Modifier.fillMaxWidth()
-                                .height(70.dp)
-                                .padding(top = 15.dp, start = 10.dp),
-                            color = Color.Black,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal,
-                        )
+                        Row {
+                            Text(
+                                text = subject.name,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(60.dp)
+                                    .padding(top = 10.dp, start = 10.dp),
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = subject.time.formatTime(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(60.dp)
+                                    .padding(top = 10.dp, start = 10.dp),
+                                color = Color.Black,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

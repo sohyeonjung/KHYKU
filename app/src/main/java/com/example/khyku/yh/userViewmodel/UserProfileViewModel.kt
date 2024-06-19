@@ -80,12 +80,11 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
     fun startStudySession(user: UserProfile?, startTime: Long) {
         if (user != null ) {
             viewModelScope.launch {
                 try {
-                    if(user.studyStartTime == null) {
+                    if(user.studyStartTime == 0L) {
                         user.studyStartTime = startTime
                     }
                     user.lastStudyTime = startTime
@@ -97,11 +96,9 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
-    
-    // duration 연산 -> long 연산
+    // todayStudyTime  maxFocusTime  studyStartTime  lastStudyTime  studyEndTime
     fun endStudySession(user: UserProfile?, endTime: Long) {
-        if (user?.studyStartTime != null) {
+        if (user != null && user.studyStartTime != 0L) {
             viewModelScope.launch {
                 try {
                     user.studyEndTime = endTime
@@ -109,6 +106,7 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
                     if (session > user.maxFocusTime) {
                         user.maxFocusTime = session
                     }
+                    user.todayStudyTime += session
                     repository.UpdateUser(user)
                 } catch (e: Exception) {
                     // 예외 처리

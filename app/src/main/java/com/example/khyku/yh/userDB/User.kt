@@ -42,6 +42,7 @@ data class UserProfile(
     var userPassword: String,
     var userMajor: String
 ) {
+    //todayStudyTime  maxFocusTime  studyStartTime  lastStudyTime  studyEndTime
     var passWd: String? = null
     var todayStudyTime:Long = 0L
     var maxFocusTime: Long = 0L
