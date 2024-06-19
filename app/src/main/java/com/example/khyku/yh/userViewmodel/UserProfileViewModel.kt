@@ -6,13 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalTime
 
 class UserProfileViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -25,7 +22,20 @@ class UserProfileViewModelFactory(private val repository: UserRepository): ViewM
 class UserProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private var _userList = MutableStateFlow<List<UserProfile>>(emptyList())
     val userList = _userList.asStateFlow()
-
+//    fun getUserByName(userName: String?): Flow<UserProfile?>? {
+//        return if (userName != null) {
+//            repository.getUserByName(userName)
+//        } else {
+//            null
+//        }
+//    }
+    suspend fun getUserByName(userName: String?): UserProfile? {
+        return if (userName != null) {
+            repository.getUserByName(userName).firstOrNull()
+        } else {
+            null
+        }
+    }
     fun InsertUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
