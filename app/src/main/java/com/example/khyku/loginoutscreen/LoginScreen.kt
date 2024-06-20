@@ -25,13 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.khyku.nav.Routes
-import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel) {
-
+    // return UserProfile?
     val KonkukGreen = Color(0xFF036B3F)
 
     var id by remember{ mutableStateOf("") }
@@ -77,10 +76,10 @@ fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel) {
                                 alertmsg = "비밀번호가 일치하지 않습니다."
                                 showAlert = true
                             } else { //모두 일치함
-                                //move to main screen with 2sec delay
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     navController.navigate(Routes.Home.route)
                                 }, 2000)
+                                //return viewModel.getUserById
                             }
                         }
                     }

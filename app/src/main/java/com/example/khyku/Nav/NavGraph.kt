@@ -39,7 +39,7 @@ fun NavGraph(navController: NavHostController) {
     val postviewModel: PostViewModel =
         viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
 
-    NavHost(navController = navController, startDestination = Routes.Home.route){
+    NavHost(navController = navController, startDestination = Routes.Login.route){
         composable(route = Routes.Community.route){
             CommunityScreen(navController)
         }
