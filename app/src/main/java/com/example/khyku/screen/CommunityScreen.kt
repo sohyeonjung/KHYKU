@@ -46,7 +46,7 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommunityScreen(navController: NavHostController) {
+fun CommunityScreen(navController: NavHostController, userName: String) {
 
 
     val context = LocalContext.current
@@ -62,10 +62,10 @@ fun CommunityScreen(navController: NavHostController) {
     var selectedPostTime by remember { mutableStateOf(" ") }
     var selectedPostDone by remember { mutableStateOf(false) }
     var selectedPostContents by remember { mutableStateOf("") }
+    var selectedUserName by remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = true) {
         viewModel.getAllItems()
-
     }
 
 
@@ -150,12 +150,12 @@ fun CommunityScreen(navController: NavHostController) {
                 selectedPostTitle = it.postTitle
                 selectedPostType = it.postType
                 selectedPostContents = it.postContents
-                println(selectedPostContents)
+                selectedUserName = it.userName
 
                 sleep(500)
 
                 //navController.navigate("Post/$selectedPostTitle/$selectedPostContents/$selectedPostType/$selectedPostId")
-                navController.navigate("Post/${it.postTitle}/${it.postContents}/${it.postType}/${it.postId}")
+                navController.navigate("Post/${it.userName}/${userName}/${it.postTitle}/${it.postContents}/${it.postType}/${it.postId}")
             }
         }
 

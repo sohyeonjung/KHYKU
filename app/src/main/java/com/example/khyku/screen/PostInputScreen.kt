@@ -33,7 +33,7 @@ import com.example.khyku.viewmodel.PostViewModel
 
 
 @Composable
-fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) {
+fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController, userName:String) {
 
     var postTitle by remember {
         mutableStateOf("")
@@ -50,7 +50,7 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
 
     val KonkukGreen = Color(0xFF036B3F)
 
-    val post = Post(postTitle, postContent, postType, postDone, getCurrentTime())
+    val post = Post(userName, postTitle, postContent, postType, postDone, getCurrentTime())
 
     fun clearText(){
         postTitle = ""
@@ -67,7 +67,7 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp,
             modifier = Modifier.padding(start=85.dp, top = 20.dp, bottom = 20.dp)
-            )
+        )
         Row {
             TextField(
                 value = postType,
@@ -102,9 +102,9 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                         .padding(start = 10.dp)
                         .fillMaxWidth()
                 )
-                
+
             }
-            
+
         }
         Spacer(modifier=Modifier.height(16.dp))
         TextField(
@@ -147,18 +147,17 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
             println(post.postTitle+"::"+post.postContents+"::"+post.postType)
             viewModel.InsertPost(post)
             navController.navigate(Routes.Community.route)
-            },
+        },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(10.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White
             )
-            ) {
+        ) {
             Text("글쓰기", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp)
         }
 
     }
 
 }
-
