@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,7 @@ fun UserProfileScreen(navController: NavController, viewModel: UserProfileViewMo
     //val viewModel: UserProfileViewModel =
     //    viewModel(factory = UserProfileViewModelFactory(UserRepository(userdb)))
 
-    //val userlist by viewModel.userList.collectAsState(initial = emptyList())
+    val userlist by viewModel.userList.collectAsState(initial = emptyList())
     var selectedUser by remember { mutableStateOf<UserProfile?>(null) }
 
     LaunchedEffect(userName) {
@@ -52,11 +53,11 @@ fun UserProfileScreen(navController: NavController, viewModel: UserProfileViewMo
     val subjectExample = selectedUser?.let { Subject("DB", "pink", it.maxFocusTime, true) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        //InputScreen(viewModel = viewModel, selectedUser)
+        InputScreen(viewModel = viewModel, selectedUser)
         if (subjectExample != null) {
             ProfileScreen(viewModel = viewModel, selectedUser, subjectExample)
         }
-        //UserList(list = userlist, onClick = { user -> selectedUser = user })
+        UserList(list = userlist, onClick = { user -> selectedUser = user })
     }
 }
 
@@ -234,7 +235,7 @@ fun ProfileScreen(viewModel: UserProfileViewModel, user: UserProfile?, subject: 
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(60.dp)
-                                        .padding(top = 10.dp),
+                                        .padding(top = 10.dp, start = 30.dp),
                                     color = Color.Black,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold
@@ -244,7 +245,7 @@ fun ProfileScreen(viewModel: UserProfileViewModel, user: UserProfile?, subject: 
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(60.dp)
-                                        .padding(top = 10.dp),
+                                        .padding(top = 10.dp, start = 30.dp),
                                     color = Color.Black,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold
