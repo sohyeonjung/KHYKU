@@ -53,11 +53,11 @@ fun UserProfileScreen(navController: NavController, viewModel: UserProfileViewMo
     val subjectExample = selectedUser?.let { Subject("DB", "pink", it.maxFocusTime, true) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        InputScreen(viewModel = viewModel, selectedUser)
+        //InputScreen(viewModel = viewModel, selectedUser)
         if (subjectExample != null) {
             ProfileScreen(viewModel = viewModel, selectedUser, subjectExample)
         }
-        UserList(list = userlist, onClick = { user -> selectedUser = user })
+        //UserList(list = userlist, onClick = { user -> selectedUser = user })
     }
 }
 
