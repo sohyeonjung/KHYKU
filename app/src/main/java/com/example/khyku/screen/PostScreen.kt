@@ -138,7 +138,7 @@ fun PostDetailScreen(
                     .background(color = Color.LightGray)
             ){
                 if(commentlist.isEmpty()) Text(text = "댓글 없음")
-                else CommentList(list = commentlist)
+                else CommentList(list = commentlist, navController)
 
                 if (showCommentDialog) {
                     CommentInputDialog(

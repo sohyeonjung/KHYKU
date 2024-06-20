@@ -43,7 +43,7 @@ fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
             var donetext:String = "모집중"
             if(post.postDone==false) donetext="모집 완료"
             Button(onClick = {
-                             //navigate
+                println("clicked")
             },
                 colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)
             ) { Text(text = donetext, color = Color.White)}
