@@ -8,8 +8,8 @@ import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class UserProfileViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
@@ -38,8 +38,9 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             null
         }
     }
-    fun getSortedUserProfilesByStudyTime() = userList.map { list ->
-        list.sortedByDescending { it.todayStudyTime }
+    suspend fun getSortedUserProfilesByStudyTime(): List<UserProfile> {
+        getAllUserProfile()
+        return userList.first().sortedByDescending { it.todayStudyTime }
     }
     suspend fun getUserById(userId: Long): UserProfile? {
         return if (userId != 0L) {

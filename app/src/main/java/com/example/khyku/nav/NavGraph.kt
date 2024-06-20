@@ -14,7 +14,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.khyku.HomeScreen.HomeScreen
-import com.example.khyku.RankingScreen.RankingScreen
 import com.example.khyku.facilityScreen.FacilityScreen
 import com.example.khyku.loginoutscreen.LoginScreen
 import com.example.khyku.loginoutscreen.RegisterScreen
@@ -25,6 +24,7 @@ import com.example.khyku.screen.PostInputScreen
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.yh.ProfileScreen.RankingScreen
 import com.example.khyku.yh.ProfileScreen.UserProfileScreen
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userDB.UserProfileDatabase
@@ -119,11 +119,8 @@ fun NavGraph(navController: NavHostController) {
                 UserProfileScreen(navController = navController, viewModel = userviewModel, userName = profile.userName)
             }
         }
-
-        composable(route = Routes.Ranking.route){
-            RankingScreen()
+        composable(route = Routes.Ranking.route) {
+            RankingScreen(navController = navController, viewModel = userviewModel)
         }
-
-
     }
 }
