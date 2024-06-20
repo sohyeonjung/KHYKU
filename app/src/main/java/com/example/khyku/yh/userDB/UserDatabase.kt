@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class, SubjectListConverters::class)
+@TypeConverters(SubjectListConverters::class)
 abstract class UserProfileDatabase : RoomDatabase() {
     abstract fun getDao(): UserProfileDao
 

@@ -8,5 +8,5 @@ sealed class Routes (val route: String) {
     object InputPost : Routes("InputPost")
     object Login : Routes("Login")
     object Register : Routes("Register")
-
+    object Profile : Routes("Profile")
 }

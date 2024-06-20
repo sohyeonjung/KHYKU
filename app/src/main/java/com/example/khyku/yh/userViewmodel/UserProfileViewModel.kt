@@ -6,13 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import java.time.Duration
-import java.time.LocalTime
 
 class UserProfileViewModelFactory(private val repository: UserRepository): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -25,7 +22,20 @@ class UserProfileViewModelFactory(private val repository: UserRepository): ViewM
 class UserProfileViewModel(private val repository: UserRepository) : ViewModel() {
     private var _userList = MutableStateFlow<List<UserProfile>>(emptyList())
     val userList = _userList.asStateFlow()
-
+//    fun getUserByName(userName: String?): Flow<UserProfile?>? {
+//        return if (userName != null) {
+//            repository.getUserByName(userName)
+//        } else {
+//            null
+//        }
+//    }
+    suspend fun getUserByName(userName: String?): UserProfile? {
+        return if (userName != null) {
+            repository.getUserByName(userName).firstOrNull()
+        } else {
+            null
+        }
+    }
     fun InsertUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
@@ -39,7 +49,6 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
     fun UpdateUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
@@ -80,12 +89,11 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
     fun startStudySession(user: UserProfile?, startTime: Long) {
         if (user != null ) {
             viewModelScope.launch {
                 try {
-                    if(user.studyStartTime == null) {
+                    if(user.studyStartTime == 0L) {
                         user.studyStartTime = startTime
                     }
                     user.lastStudyTime = startTime
@@ -97,11 +105,9 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
-    
-    // duration 연산 -> long 연산
+    // todayStudyTime  maxFocusTime  studyStartTime  lastStudyTime  studyEndTime
     fun endStudySession(user: UserProfile?, endTime: Long) {
-        if (user?.studyStartTime != null) {
+        if (user != null && user.studyStartTime != 0L) {
             viewModelScope.launch {
                 try {
                     user.studyEndTime = endTime
@@ -109,6 +115,7 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
                     if (session > user.maxFocusTime) {
                         user.maxFocusTime = session
                     }
+                    user.todayStudyTime += session
                     repository.UpdateUser(user)
                 } catch (e: Exception) {
                     // 예외 처리
@@ -143,6 +150,7 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
     fun checkUserPassword(userStudentId: Long, password: String, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             val user = repository.getUserById(userStudentId).firstOrNull()
+
             callback(user?.userPassword == password)
         }
     }

@@ -24,4 +24,5 @@ class UserRepository(private val db: UserProfileDatabase){
     }
     fun getAllUsers() = dao.getAllUserProfiles()
     fun getUserById(userStudentId: Long): Flow<UserProfile?> = dao.getUserProfileById(userStudentId)
+    fun getUserByName(userName: String): Flow<UserProfile?> = dao.getUserProfileByName(userName)
 }

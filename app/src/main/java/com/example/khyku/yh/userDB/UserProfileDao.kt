@@ -24,4 +24,7 @@ interface UserProfileDao {
 
     @Query("SELECT * FROM user_profiles WHERE userStudentId = :userStudentId LIMIT 1")
     fun getUserProfileById(userStudentId: Long): Flow<UserProfile?>
+
+    @Query("SELECT * FROM user_profiles WHERE userName = :userName LIMIT 1")
+    fun getUserProfileByName(userName: String): Flow<UserProfile?>
 }

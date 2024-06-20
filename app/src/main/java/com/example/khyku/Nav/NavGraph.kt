@@ -20,6 +20,7 @@ import com.example.khyku.screen.PostInputScreen
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.yh.ProfileScreen.UserProfileScreen
 import com.example.khyku.yh.userDB.UserProfileDatabase
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 import com.example.khyku.yh.userViewmodel.UserProfileViewModelFactory
@@ -40,7 +41,7 @@ fun NavGraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = Routes.Home.route){
         composable(route = Routes.Community.route){
-           CommunityScreen(navController)
+            CommunityScreen(navController)
         }
         composable(route = Routes.InputPost.route){
             PostInputScreen(viewModel = postviewModel, navController = navController)
@@ -89,6 +90,10 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(route = Routes.Register.route){
             RegisterScreen(navController = navController, viewModel = userviewModel)
+        }
+        // userName 넘겨야함
+        composable(route = Routes.Profile.route){
+            UserProfileScreen(navController = navController, viewModel = userviewModel, userName = "yh" )
         }
     }
 }
