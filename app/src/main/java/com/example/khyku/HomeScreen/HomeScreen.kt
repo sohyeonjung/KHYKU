@@ -75,8 +75,9 @@ class UserViewModelFactory(private val userProfile:UserProfile?): ViewModelProvi
 }
 
 class UserViewModel(private val userProfile:UserProfile?): ViewModel(){
-    //var user: MutableState<UserProfile> = mutableStateOf(userProfile ?: UserProfile(0, "", "",""))
-    var user:MutableState<UserProfile> by remember { mutableStateOf(userProfile ?: UserProfile(0, "", "","")) }
+    var user: MutableState<UserProfile> = mutableStateOf(userProfile ?: UserProfile(0, "", "",""))
+    //var user:MutableState<UserProfile> by remember { mutableStateOf(userProfile ?: UserProfile(0, "", "","")) }
+    //var user by remember { mutableStateOf<UserProfile?>(null) }
     var selectedSub:Subject
     var timerActive = mutableStateOf(false)
     val localtime = LocalTime.now().toSecondOfDay().toLong()
@@ -563,10 +564,10 @@ fun TimerScreen(
         else if(userViewModel.user.value.todayStudyTime >0){
             Text(userViewModel.user.value.todayStudyTime.formatTime(), fontSize = 24.sp, color = Color.White)
         }
-        if(userViewModel.timerActive.value){
-            Text(text = userViewModel.selectedSub.name, color = Color.White)
-            Text(text = (userViewModel.selectedSub.time + timerValue).formatTime(), fontSize = 24.sp, color = Color.White)
-        }
+//        if(userViewModel.timerActive.value){
+//            Text(text = userViewModel.selectedSub.name, color = Color.White)
+//            Text(text = (userViewModel.selectedSub.time + timerValue).formatTime(), fontSize = 24.sp, color = Color.White)
+//        }
         Spacer(modifier = Modifier.height(35.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),

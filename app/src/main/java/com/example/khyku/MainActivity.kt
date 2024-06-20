@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.khyku.nav.NavGraph
+import com.example.khyku.nav.Routes
 import com.example.khyku.ui.theme.KHYKUTheme
 
 //import com.example.khyku.ui.theme.KHYKUTheme
@@ -58,6 +59,7 @@ class MainActivity : ComponentActivity() {
                             "Home" -> true
                             "Profile" -> true
                             "Facility" -> true
+                            "Ranking" -> true
                             else -> false
                         }
                     }

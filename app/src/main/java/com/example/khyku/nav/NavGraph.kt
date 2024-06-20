@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.khyku.HomeScreen.HomeScreen
+import com.example.khyku.RankingScreen.RankingScreen
 import com.example.khyku.facilityScreen.FacilityScreen
 import com.example.khyku.loginoutscreen.LoginScreen
 import com.example.khyku.loginoutscreen.RegisterScreen
@@ -119,6 +120,9 @@ fun NavGraph(navController: NavHostController) {
             }
         }
 
+        composable(route = Routes.Ranking.route){
+            RankingScreen()
+        }
 
 
     }
