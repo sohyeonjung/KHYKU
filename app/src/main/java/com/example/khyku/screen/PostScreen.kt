@@ -26,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.khyku.R
 import com.example.khyku.roomDB.CommentDatabase
 import com.example.khyku.roomDB.Post
 import com.example.khyku.roomDB.PostDatabase
@@ -84,7 +86,7 @@ fun PostDetailScreen(
                 .height(70.dp)
                 .padding(top = 15.dp, start = 10.dp),
             color = Color.White,
-            fontSize = 27.sp,
+            fontSize = 23.sp,
             fontWeight = FontWeight.Bold
         )
         Column (modifier = Modifier
@@ -124,7 +126,9 @@ fun PostDetailScreen(
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier.background(color = KonkukGreen).padding(top=20.dp))
+        Spacer(modifier = Modifier
+            .background(color = KonkukGreen)
+            .padding(top = 8.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -149,9 +153,9 @@ fun PostDetailScreen(
                     .padding(16.dp)
                     .size(50.dp)
                     .align(Alignment.BottomEnd),
-                containerColor = Color.LightGray)
+                containerColor = colorResource(id = R.color.BarGreen))
             {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
             }
 
 

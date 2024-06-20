@@ -136,6 +136,7 @@ package com.example.khyku.facilityScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -200,7 +201,7 @@ fun FacilityScreen(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(20.dp),
             color = Color.White,
-            fontSize = 20.sp,
+            fontSize = 23.sp,
             fontWeight = FontWeight.Bold
         )
 
@@ -228,41 +229,83 @@ fun FacilityScreen(modifier: Modifier = Modifier) {
 @Composable
 fun FacilityUI(item: Facility, onClick: (item:Facility) -> Unit) {
     Column (modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onClick(item) }){
-        Row(modifier = Modifier.padding(15.dp)) {
+        .fillMaxWidth().padding(start = 10.dp, top = 3.dp, bottom = 4.dp)
+        .clickable { onClick(item) })
+    {
+        Row(modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)) {
             if(item.charge == true){
                 Box(modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
-                    .background(colorResource(id = R.color.konkukgreen)))
+                    //.background(colorResource(id = R.color.konkukgreen))
+                    .background(Color.White)
+                    .border(
+                        1.dp,
+                        colorResource(id = R.color.konkukgreen),
+                        shape = RoundedCornerShape(16.dp)
+                    ))
                 {
-                    Text(text = " 충전 가능 ", color = Color.White, modifier = Modifier.padding(3.dp))
+                    Text(text = " 충전 가능 ", 
+                        //color = Color.White, 
+                        color = colorResource(id = R.color.konkukgreen),
+                        modifier = Modifier.padding(3.dp))
                 }
                 Spacer(modifier = Modifier.padding(4.dp))
             }
             if(item.cafe == true){
+//                Box(modifier = Modifier
+//                    .clip(RoundedCornerShape(16.dp))
+//                    .background(colorResource(id = R.color.konkukgreen)))
+//                {
+//                    Text(text = " 카페 ", color = Color.White, modifier = Modifier.padding(3.dp))
+//                }
+//                Spacer(modifier = Modifier.padding(4.dp))
                 Box(modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
-                    .background(colorResource(id = R.color.konkukgreen)))
+                    //.background(colorResource(id = R.color.konkukgreen))
+                    .background(Color.White)
+                    .border(
+                        1.dp,
+                        colorResource(id = R.color.konkukgreen),
+                        shape = RoundedCornerShape(16.dp)
+                    ))
                 {
-                    Text(text = " 카페 ", color = Color.White, modifier = Modifier.padding(3.dp))
+                    Text(text = " 카페 ",
+                        //color = Color.White,
+                        color = colorResource(id = R.color.konkukgreen),
+                        modifier = Modifier.padding(3.dp))
                 }
                 Spacer(modifier = Modifier.padding(4.dp))
             }
             if(item.room == true){
+//                Box(modifier = Modifier
+//                    .clip(RoundedCornerShape(16.dp))
+//                    .background(colorResource(id = R.color.konkukgreen)))
+//                {
+//                    Text(text = " 회의실 ", color = Color.White, modifier = Modifier.padding(3.dp))
+//                }
                 Box(modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
-                    .background(colorResource(id = R.color.konkukgreen)))
+                    //.background(colorResource(id = R.color.konkukgreen))
+                    .background(Color.White)
+                    .border(
+                        1.dp,
+                        colorResource(id = R.color.konkukgreen),
+                        shape = RoundedCornerShape(16.dp)
+                    ))
                 {
-                    Text(text = " 회의실 ", color = Color.White, modifier = Modifier.padding(3.dp))
+                    Text(text = " 회의실 ",
+                        //color = Color.White,
+                        color = colorResource(id = R.color.konkukgreen),
+                        modifier = Modifier.padding(3.dp))
                 }
+                Spacer(modifier = Modifier.padding(4.dp))
             }
         }
         Text(
             text = item.location,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.padding(start = 2.dp, bottom = 2.dp)
         )
         Row {
             Icon(imageVector = Icons.Default.Place, contentDescription = "")
@@ -284,14 +327,14 @@ fun FacilityInfo(item:Facility,onClose: () -> Unit){
             Text(text = item.location, fontWeight = FontWeight.Bold, fontSize = 20.sp)
         }
 
-        Text(text = "건물 사진", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-        Image(painter = painterResource(id = item.buildingImg), contentDescription = "" , modifier = Modifier.padding(20.dp))
-        Text(text = "건물 및 카페 위치", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Text(text = "건물 사진", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start =20.dp, top = 10.dp))
+        Image(painter = painterResource(id = item.buildingImg), contentDescription = "" , modifier = Modifier.padding(20.dp, 10.dp))
+        Text(text = "건물 및 카페 위치", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start=20.dp))
         Box(modifier = Modifier.fillMaxWidth()){
             GoogleMap(
                 modifier = Modifier
                     .padding(20.dp)
-                    .height(300.dp),
+                    .height(230.dp),
                 cameraPositionState =  cameraPositionState
             ){
                 Marker(
@@ -304,7 +347,7 @@ fun FacilityInfo(item:Facility,onClose: () -> Unit){
                 )
             }
         }
-        Text(text = "좌석 사진", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Text(text = "좌석 사진", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 20.dp))
         Image(painter = painterResource(id = item.seatImg), contentDescription = "" , modifier = Modifier.padding(20.dp))
         Row {
             if(item.charge==true){

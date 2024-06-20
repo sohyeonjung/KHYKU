@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,9 +31,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -80,13 +83,15 @@ fun CommunityScreen(navController: NavHostController) {
                     containerColor = KonkukGreen,
                     titleContentColor = Color.Black,
                 ),
+
                 title = {
                     Text(text = "스터디원 찾기",
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(100.dp, 50.dp),
-                        fontSize = 30.sp //이게 크기 최대
+                        fontSize = 23.sp, //이게 크기 최대
+                        color = Color.White
                     )
-                }
+                },
             )
         },
         floatingActionButton = {
@@ -95,7 +100,7 @@ fun CommunityScreen(navController: NavHostController) {
                     navController.navigate(Routes.InputPost.route)
                 },
                 containerColor = KonkukGreen) {
-                Icon(Icons.Default.Edit, contentDescription = "Add")
+                Icon(Icons.Default.Edit, contentDescription = "Add", tint = Color.White)
             }
         }
     ) { innerPadding ->
@@ -105,7 +110,7 @@ fun CommunityScreen(navController: NavHostController) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Row {
+            Row (modifier = Modifier.background(KonkukGreen).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically){
                 TextField(
                     value = searchText,
                     onValueChange = { searchText = it },
@@ -120,7 +125,7 @@ fun CommunityScreen(navController: NavHostController) {
                         viewModel.getItems(searchText)
                     }),
                     leadingIcon = {
-                        Icon(Icons.Default.Search, contentDescription = "Search")
+                        Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
                     },
                     modifier = Modifier.width(360.dp)
 
@@ -128,11 +133,11 @@ fun CommunityScreen(navController: NavHostController) {
                 Icon(Icons.Default.Refresh,
                     contentDescription = "update",
                     modifier = Modifier
-                        .size(56.dp)
-                        .background(color = KonkukGreen)
+                        .size(30.dp)
                         .clickable {
                             viewModel.getAllItems()
                         },
+                    tint = Color.White
                 )
 
             }
