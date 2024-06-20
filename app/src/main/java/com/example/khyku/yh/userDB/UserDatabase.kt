@@ -20,7 +20,7 @@ abstract class UserProfileDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: UserProfileDatabase? = null
         fun getUserProfileDatabase(context: Context): UserProfileDatabase {
-            context.deleteDatabase("user_profile_database")
+            //context.deleteDatabase("user_profile_database")
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

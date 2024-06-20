@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.khyku.HomeScreen.HomeScreen
+//import com.example.khyku.RankingScreen.RankingScreen
 import com.example.khyku.facilityScreen.FacilityScreen
 import com.example.khyku.loginoutscreen.LoginScreen
 import com.example.khyku.loginoutscreen.RegisterScreen
@@ -24,6 +25,7 @@ import com.example.khyku.screen.PostInputScreen
 import com.example.khyku.viewmodel.PostRepository
 import com.example.khyku.viewmodel.PostViewModel
 import com.example.khyku.viewmodel.PostViewModelFactory
+import com.example.khyku.yh.ProfileScreen.RankingScreen
 import com.example.khyku.yh.ProfileScreen.UserProfileScreen
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userDB.UserProfileDatabase
@@ -47,13 +49,23 @@ fun NavGraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = Routes.Login.route){
         composable(route = Routes.Community.route){
-            CommunityScreen(navController)
+            CommunityScreen(navController, userProfile!!.userName)
         }
         composable(route = Routes.InputPost.route){
-            PostInputScreen(viewModel = postviewModel, navController = navController)
+            PostInputScreen(viewModel = postviewModel, navController = navController, userProfile!!.userName)
         }
-        composable(route = "Post/{postTitle}/{postContents}/{postType}/{postId}",
+        composable(route = "Post/{userName}/{currentUserName}/{postTitle}/{postContents}/{postType}/{postId}",
             arguments = listOf(
+                navArgument("userName"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("currentUserName"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
                 navArgument("postTitle"){
                     type = NavType.StringType
                     defaultValue = ""
@@ -78,6 +90,8 @@ fun NavGraph(navController: NavHostController) {
 
         ){
             PostDetailScreen(navController = navController,
+                userName = it.arguments?.getString("userName"),
+                currentUserName = it.arguments?.getString("currentUserName"),
                 postTitle = it.arguments?.getString("postTitle") ,
                 postContents = it.arguments?.getString("postContents"),
                 postType = it.arguments?.getString("postType"),
@@ -106,6 +120,8 @@ fun NavGraph(navController: NavHostController) {
                 UserProfileScreen(navController = navController, viewModel = userviewModel, userName = profile.userName)
             }
         }
+        composable(route = Routes.Ranking.route) {
+            RankingScreen(navController = navController, viewModel = userviewModel)
+        }
     }
 }
-

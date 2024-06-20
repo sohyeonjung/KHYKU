@@ -76,6 +76,7 @@ class MainActivity : ComponentActivity() {
                             "Home" -> true
                             "Profile" -> true
                             "Facility" -> true
+                            "Ranking" -> true
                             else -> false
                         }
                     }

@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "comments")
 data class Comment(
+    var userName:String,
     var commentContents:String,
     var commentTime:String,
     var commentPost:String,

@@ -46,9 +46,18 @@ fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
         .padding(start = 10.dp)
         .fillMaxWidth()
         .clickable { onClick(post) }){
-        Row(modifier = Modifier.padding(bottom = 6.dp)) {
-            var donetext:String = "  모집중  "
+        Row {
+            Box(modifier =Modifier.padding(bottom = 6.dp) )
+            var donetext:String = " 모집중 "
             if(post.postDone==false) donetext="  모집 완료  "
+//            Button(onClick = {
+//                println("clicked")
+//            },
+//                colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)
+//            ) { Text(text = donetext, color = Color.White)}
+//            Spacer(modifier = Modifier.padding(start = 20.dp))
+//            OutlinedButton(onClick = {}
+//            ) { Text(text = post.postType, color = Color.Black)}
             Box(modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorResource(id = R.color.konkukgreen)))
@@ -72,7 +81,12 @@ fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
                     modifier = Modifier.padding(3.dp))
             }
         }
-        Text(text = post.postTitle, fontSize = 25.sp)
-        Text(text = post.postTime)
+        Text(text = post.postTitle, fontSize = 25.sp, modifier = Modifier.padding(top = 7.dp, start = 3.dp))
+        Row {
+            Text(post.userName)
+            Spacer(modifier = Modifier.padding(start=10.dp))
+            Text(text = post.postTime)
+        }
+
     }
 }

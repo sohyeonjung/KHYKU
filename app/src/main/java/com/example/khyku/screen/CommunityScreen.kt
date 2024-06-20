@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +48,7 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CommunityScreen(navController: NavHostController) {
+fun CommunityScreen(navController: NavHostController, userName: String) {
 
 
     val context = LocalContext.current
@@ -65,10 +64,10 @@ fun CommunityScreen(navController: NavHostController) {
     var selectedPostTime by remember { mutableStateOf(" ") }
     var selectedPostDone by remember { mutableStateOf(false) }
     var selectedPostContents by remember { mutableStateOf("") }
+    var selectedUserName by remember { mutableStateOf("") }
 
     LaunchedEffect(key1 = true) {
         viewModel.getAllItems()
-
     }
 
 
@@ -83,15 +82,14 @@ fun CommunityScreen(navController: NavHostController) {
                     containerColor = KonkukGreen,
                     titleContentColor = Color.Black,
                 ),
-
                 title = {
                     Text(text = "스터디원 찾기",
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(100.dp, 50.dp),
+                        modifier = Modifier.padding(20.dp, 50.dp),
                         fontSize = 23.sp, //이게 크기 최대
                         color = Color.White
                     )
-                },
+                }
             )
         },
         floatingActionButton = {
@@ -155,12 +153,12 @@ fun CommunityScreen(navController: NavHostController) {
                 selectedPostTitle = it.postTitle
                 selectedPostType = it.postType
                 selectedPostContents = it.postContents
-                println(selectedPostContents)
+                selectedUserName = it.userName
 
                 sleep(500)
 
                 //navController.navigate("Post/$selectedPostTitle/$selectedPostContents/$selectedPostType/$selectedPostId")
-                navController.navigate("Post/${it.postTitle}/${it.postContents}/${it.postType}/${it.postId}")
+                navController.navigate("Post/${it.userName}/${userName}/${it.postTitle}/${it.postContents}/${it.postType}/${it.postId}")
             }
         }
 

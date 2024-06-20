@@ -393,7 +393,7 @@ fun ItemUI(item: Subject) {
             tint = Color(android.graphics.Color.parseColor(item.cate)),
             contentDescription = "",
 
-        )
+            )
         Spacer(modifier = Modifier.width(30.dp))
         Text(text = item.name, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.width(30.dp))
@@ -470,7 +470,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 userViewModel.user.value.subjects.forEach{
-                    subject ->  DropdownMenuItem(
+                        subject ->  DropdownMenuItem(
                     text = {
                         val isSelected = subject.name == subName
                         val style = if (isSelected) {
@@ -485,7 +485,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                         subName = subject.name
                     },
                     modifier = Modifier.padding()
-                    )
+                )
                 }
             }
         }

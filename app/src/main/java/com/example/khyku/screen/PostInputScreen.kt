@@ -2,6 +2,7 @@ package com.example.khyku.screen
 
 import android.os.SystemClock.sleep
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +35,7 @@ import com.example.khyku.viewmodel.PostViewModel
 
 
 @Composable
-fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) {
+fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController, userName:String) {
 
     var postTitle by remember {
         mutableStateOf("")
@@ -50,7 +52,7 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
 
     val KonkukGreen = Color(0xFF036B3F)
 
-    val post = Post(postTitle, postContent, postType, postDone, getCurrentTime())
+    val post = Post(userName, postTitle, postContent, postType, postDone, getCurrentTime())
 
     fun clearText(){
         postTitle = ""
@@ -65,14 +67,14 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
     {
         Text("스터디 글쓰기", color = Color.White,
             fontWeight = FontWeight.Bold,
-            fontSize = 40.sp,
-            modifier = Modifier.padding(start=85.dp, top = 20.dp, bottom = 20.dp)
-            )
+            fontSize = 23.sp,
+            modifier = Modifier.padding(start=20.dp, top = 20.dp, bottom = 20.dp)
+        )
         Row {
             TextField(
                 value = postType,
                 onValueChange = {postType = it},
-                placeholder = { Text(text="분야", fontSize = 20.sp) },
+                placeholder = { Text(text="분야", fontSize = 15.sp) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -81,11 +83,11 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                 ),
                 modifier = Modifier.height(72.dp)
             )
-            Spacer(modifier = Modifier.padding(start=20.dp))
+            Spacer(modifier = Modifier.padding(start=4.dp))
             Column(modifier = Modifier
                 .background(color = Color.White)
             ) {
-                Text(text = "모집중/모집완료",
+                Text(text = "모집완료/모집중",
                     color = Color.Black,
                     modifier = Modifier.padding(start=10.dp),
                     fontSize = 14.sp
@@ -102,15 +104,15 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                         .padding(start = 10.dp)
                         .fillMaxWidth()
                 )
-                
+
             }
-            
+
         }
-        Spacer(modifier=Modifier.height(16.dp))
+        Spacer(modifier=Modifier.height(4.dp))
         TextField(
             value = postTitle,
             onValueChange = {postTitle = it},
-            placeholder = { Text("제목", fontSize = 20.sp)},
+            placeholder = { Text("제목", fontSize = 15.sp)},
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = Color.White,
@@ -118,10 +120,10 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                 unfocusedTextColor = Color.Black
             ),
             modifier = Modifier
-                .height(72.dp)
+                .height(60.dp)
                 .fillMaxSize()
         )
-        Spacer(modifier=Modifier.height(16.dp))
+        Spacer(modifier=Modifier.height(4.dp))
         TextField(
             value = postContent,
             onValueChange = {postContent = it},
@@ -137,28 +139,29 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
                 .fillMaxSize()
 
         )
-        Button(onClick = {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+            Button(onClick = {
 
-            //TODO(빈 string 거르기)
-            if(post.postTitle.isNullOrBlank()) post.postTitle = "no title"
-            if(post.postContents.isBlank()) post.postContents = "no contents"
-            if(post.postType.isBlank()) post.postType = "no type"
-            sleep(300)
-            println(post.postTitle+"::"+post.postContents+"::"+post.postType)
-            viewModel.InsertPost(post)
-            navController.navigate(Routes.Community.route)
+                //TODO(빈 string 거르기)
+                if(post.postTitle.isNullOrBlank()) post.postTitle = "no title"
+                if(post.postContents.isBlank()) post.postContents = "no contents"
+                if(post.postType.isBlank()) post.postType = "no type"
+                sleep(300)
+                println(post.postTitle+"::"+post.postContents+"::"+post.postType)
+                viewModel.InsertPost(post)
+                navController.navigate(Routes.Community.route)
             },
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White
-            )
+                modifier = Modifier
+                    .padding(40.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White
+                )
             ) {
-            Text("글쓰기", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text("글쓰기", color = Color.Black, fontSize = 15.sp)
+            }
         }
+
 
     }
 
 }
-

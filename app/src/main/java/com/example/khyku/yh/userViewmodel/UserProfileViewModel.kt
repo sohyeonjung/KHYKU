@@ -8,6 +8,7 @@ import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -29,12 +30,17 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
 //            null
 //        }
 //    }
+
     suspend fun getUserByName(userName: String?): UserProfile? {
         return if (userName != null) {
             repository.getUserByName(userName).firstOrNull()
         } else {
             null
         }
+    }
+    suspend fun getSortedUserProfilesByStudyTime(): List<UserProfile> {
+        getAllUserProfile()
+        return userList.first().sortedByDescending { it.todayStudyTime }
     }
     suspend fun getUserById(userId: Long): UserProfile? {
         return if (userId != 0L) {
@@ -43,7 +49,6 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             null
         }
     }
-
     fun InsertUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
@@ -84,7 +89,6 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
-
     fun getAllUserProfile() {
         viewModelScope.launch {
             try {
@@ -97,6 +101,7 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             }
         }
     }
+
     fun startStudySession(user: UserProfile?, startTime: Long) {
         if (user != null ) {
             viewModelScope.launch {
@@ -158,7 +163,6 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
     fun checkUserPassword(userStudentId: Long, password: String, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             val user = repository.getUserById(userStudentId).firstOrNull()
-
             callback(user?.userPassword == password)
         }
     }
@@ -185,20 +189,3 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
         }
     }
 }
-
-//    fun updateStatusMessage(newMessage: String) {
-//        statusMessage = newMessage
-//    }
-//    var mainSubject: String = ""
-//        get() = field
-//        set(value) {
-//            if (subjects.size < 3 || subjects.containsKey(value)) {
-//                field = value
-//                // new main subject 초기화
-//                subjects.putIfAbsent(value, Duration.ZERO)
-//            } else {
-//                throw IllegalStateException("3 main subjects")
-//            }
-//        }
-//    val mainSubjectStudyTotal: Duration
-//        get() = subjects[mainSubject] ?: Duration.ZERO

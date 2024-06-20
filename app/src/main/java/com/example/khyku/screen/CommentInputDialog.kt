@@ -28,18 +28,19 @@ import com.example.khyku.viewmodel.CommentViewModel
 fun CommentInputDialog(
     onDismiss: () -> Unit,
     viewModel: CommentViewModel,
-    postId:String
+    postId:String,
+    userName:String
 ) {
     var commentText by remember { mutableStateOf(" ") }
 
     val KonkukGreen = Color(0xFF036B3F)
 
 
-    val comment = Comment(commentText, getCurrentTime(), postId)
+    val comment = Comment(userName, commentText, getCurrentTime(), postId)
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("User Name", color = Color.Black) }, //사용자 이름으로
+        title = { Text(userName, color = Color.Black) }, //사용자 이름으로
         modifier = Modifier.background(color = Color.White),
         text = {
             TextField(
@@ -55,10 +56,10 @@ fun CommentInputDialog(
         },
         confirmButton = {
             Button(onClick = {
-                    onDismiss()
-                    viewModel.InsertComment(comment, postId)},
+                onDismiss()
+                viewModel.InsertComment(comment, postId)},
                 colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)
-                ) {
+            ) {
                 Text("작성", color = Color.White)
             }
         },

@@ -26,13 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.khyku.R
 import com.example.khyku.roomDB.CommentDatabase
 import com.example.khyku.roomDB.Post
 import com.example.khyku.roomDB.PostDatabase
@@ -47,10 +45,12 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 @Composable
 fun PostDetailScreen(
     navController: NavController,
+    userName:String?,
     postTitle: String?,
     postContents: String?,
     postType: String?,
-    postId: String?
+    postId: String?,
+    currentUserName:String?,
 ) {
 
     val KonkukGreen = Color(0xFF036B3F)
@@ -72,7 +72,7 @@ fun PostDetailScreen(
     LaunchedEffect(key1 = true) {
         commentviewModel.getItems(postId.toString())
     }
-    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
+    //val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
 
     Column (
         modifier = Modifier
@@ -95,7 +95,7 @@ fun PostDetailScreen(
             //.height(200.dp)
         ){
             Text(
-                text="사람이름",
+                text=userName.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 10.dp),
@@ -126,9 +126,7 @@ fun PostDetailScreen(
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier
-            .background(color = KonkukGreen)
-            .padding(top = 8.dp))
+        Spacer(modifier = Modifier.background(color = KonkukGreen).padding(top=4.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -139,21 +137,21 @@ fun PostDetailScreen(
                 modifier = Modifier
                     .background(color = Color.LightGray)
             ){
-                if(commentlist.isEmpty()) Text(text = "댓글 없음")
-                else CommentList(list = commentlist)
+                if(commentlist.isEmpty()) Text(text = "")
+                else CommentList(list = commentlist, navController)
 
                 if (showCommentDialog) {
                     CommentInputDialog(
-                        onDismiss = { showCommentDialog = false }, commentviewModel, postId.toString()
+                        onDismiss = { showCommentDialog = false}, commentviewModel, postId.toString(), currentUserName.toString()
                     )
                 }
             }
-             FloatingActionButton(onClick = { showCommentDialog = true },
+            FloatingActionButton(onClick = { showCommentDialog = true },
                 modifier = Modifier
                     .padding(16.dp)
                     .size(50.dp)
                     .align(Alignment.BottomEnd),
-                containerColor = colorResource(id = R.color.BarGreen))
+                containerColor = KonkukGreen)
             {
                 Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
             }
