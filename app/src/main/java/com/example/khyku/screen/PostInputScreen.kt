@@ -33,7 +33,7 @@ import com.example.khyku.viewmodel.PostViewModel
 
 
 @Composable
-fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) {
+fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController, userName:String) {
 
     var postTitle by remember {
         mutableStateOf("")
@@ -50,7 +50,7 @@ fun PostInputScreen(viewModel: PostViewModel, navController: NavHostController) 
 
     val KonkukGreen = Color(0xFF036B3F)
 
-    val post = Post(postTitle, postContent, postType, postDone, getCurrentTime())
+    val post = Post(userName, postTitle, postContent, postType, postDone, getCurrentTime())
 
     fun clearText(){
         postTitle = ""

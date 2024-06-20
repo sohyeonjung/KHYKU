@@ -33,13 +33,12 @@ fun CommentUI(comment:Comment) {
         .background(
             color = Color.White
         )){
-        Text(text="comment.userName", fontWeight = FontWeight.Bold, fontSize = 15.sp,
+        Text(text=comment.userName, fontWeight = FontWeight.Bold, fontSize = 15.sp,
             modifier = Modifier.padding(bottom = 5.dp, top=5.dp))
         Text(text = comment.commentContents, fontSize = 15.sp,
             modifier = Modifier.padding(bottom = 5.dp))
         Text(text = comment.commentTime, fontSize = 15.sp,
             modifier = Modifier.padding(bottom = 5.dp))
-        //recomments도 구현해야함
     }
     //Spacer(modifier = Modifier.padding(top=10.dp).background(color = Color.LightGray))
 

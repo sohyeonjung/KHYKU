@@ -45,10 +45,12 @@ import com.example.khyku.viewmodel.PostViewModelFactory
 @Composable
 fun PostDetailScreen(
     navController: NavController,
+    userName:String?,
     postTitle: String?,
     postContents: String?,
     postType: String?,
-    postId: String?
+    postId: String?,
+    currentUserName:String?,
 ) {
 
     val KonkukGreen = Color(0xFF036B3F)
@@ -70,7 +72,7 @@ fun PostDetailScreen(
     LaunchedEffect(key1 = true) {
         commentviewModel.getItems(postId.toString())
     }
-    val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
+    //val post = Post("title", "sdkjakljkxnkljskd/ndksljfksjdk;sj","programming",true, getCurrentTime() )
 
     Column (
         modifier = Modifier
@@ -93,7 +95,7 @@ fun PostDetailScreen(
             //.height(200.dp)
         ){
             Text(
-                text="사람이름",
+                text=userName.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 10.dp, top = 10.dp),
@@ -140,7 +142,7 @@ fun PostDetailScreen(
 
                 if (showCommentDialog) {
                     CommentInputDialog(
-                        onDismiss = { showCommentDialog = false }, commentviewModel, postId.toString()
+                        onDismiss = { showCommentDialog = false}, commentviewModel, postId.toString(), currentUserName.toString()
                     )
                 }
             }

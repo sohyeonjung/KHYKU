@@ -47,13 +47,23 @@ fun NavGraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = Routes.Login.route){
         composable(route = Routes.Community.route){
-            CommunityScreen(navController)
+            CommunityScreen(navController, userProfile!!.userName)
         }
         composable(route = Routes.InputPost.route){
-            PostInputScreen(viewModel = postviewModel, navController = navController)
+            PostInputScreen(viewModel = postviewModel, navController = navController, userProfile!!.userName)
         }
-        composable(route = "Post/{postTitle}/{postContents}/{postType}/{postId}",
+        composable(route = "Post/{userName}/{currentUserName}/{postTitle}/{postContents}/{postType}/{postId}",
             arguments = listOf(
+                navArgument("userName"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("currentUserName"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
                 navArgument("postTitle"){
                     type = NavType.StringType
                     defaultValue = ""
@@ -78,6 +88,8 @@ fun NavGraph(navController: NavHostController) {
 
         ){
             PostDetailScreen(navController = navController,
+                userName = it.arguments?.getString("userName"),
+                currentUserName = it.arguments?.getString("currentUserName"),
                 postTitle = it.arguments?.getString("postTitle") ,
                 postContents = it.arguments?.getString("postContents"),
                 postType = it.arguments?.getString("postType"),

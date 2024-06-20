@@ -52,6 +52,11 @@ fun PostUI(post: Post, onClick: (post:Post) -> Unit) {
             ) { Text(text = post.postType, color = Color.Black)}
         }
         Text(text = post.postTitle, fontSize = 30.sp)
-        Text(text = post.postTime)
+        Row {
+            Text(post.userName)
+            Spacer(modifier = Modifier.padding(start=10.dp))
+            Text(text = post.postTime)
+        }
+
     }
 }
