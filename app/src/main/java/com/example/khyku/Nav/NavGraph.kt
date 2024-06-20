@@ -86,7 +86,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = Routes.Home.route){
-            HomeScreen(userProfile)
+            HomeScreen(userProfile, userviewModel)
         }
         composable(route = Routes.Facility.route){
             FacilityScreen()
