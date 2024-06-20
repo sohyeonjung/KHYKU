@@ -1,5 +1,7 @@
 package com.example.khyku.loginoutscreen
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.khyku.nav.Routes
 import com.example.khyku.yh.userDB.UserProfile
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
 import com.example.khyku.yh.ProfileScreen.ProfileScreen
@@ -109,7 +112,10 @@ fun RegisterScreen(navController: NavController, viewModel: UserProfileViewModel
                             if (success) {
                                 showalert = true
                                 alertmsg = "회원가입에 성공했습니다."
-                                // TODO(navigate to main screen)
+                                //move to login screen
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    navController.navigate(Routes.Login.route)
+                                }, 2000)
                             } else {
                                 showalert = true
                                 alertmsg = "회원가입에 실패했습니다."

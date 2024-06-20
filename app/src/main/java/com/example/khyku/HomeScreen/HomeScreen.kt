@@ -49,8 +49,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.R
-import com.example.khyku.User.Subject
-import com.example.khyku.User.User
+import com.example.khyku.yh.userDB.Subject
+import com.example.khyku.yh.userDB.UserProfile
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,17 +60,19 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class UserViewModel: ViewModel(){
-    var user: MutableState<User>
-    var selectedSub:Subject
+    var user: MutableState<UserProfile>
+    var selectedSub: Subject
     var timerActive = mutableStateOf(false)
     init{
-        user = mutableStateOf<User>(User("dy", mutableListOf<Subject>(Subject("과목", "#589288", 0, true)), 0))
+        user = mutableStateOf<UserProfile>(
+            UserProfile(0, "", "", ""))
+        user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
         selectedSub = user.value.subjects[0]
     }
     fun addSubject(sub:Subject) {
-        var updateSubject = user.value.subjects + sub
+        val updateSubject = user.value.subjects + sub
         //not use add
-        user.value = user.value.copy(subjects = updateSubject)
+        user.value.subjects = updateSubject
     }
 
     fun changeTimerActive(){
@@ -99,7 +101,7 @@ class UserViewModel: ViewModel(){
 
     fun stopTimer() {
         selectedSub.time += _timer.value
-        user.value.totalTime += _timer.value
+        user.value.todayStudyTime += _timer.value
         _timer.value = 0
         timerJob?.cancel()
     }
@@ -109,6 +111,79 @@ class UserViewModel: ViewModel(){
         timerJob?.cancel()
     }
 }
+
+
+//class TimerViewModel : ViewModel() {
+//    private val _timer = MutableStateFlow(0L)
+//    val timer = _timer.asStateFlow()
+//
+//    private var timerJob: Job? = null
+//
+//    fun startTimer() {
+//        timerJob?.cancel()
+//        timerJob = viewModelScope.launch {
+//            while (true) {
+//                delay(1000)
+//                _timer.value++
+//            }
+//        }
+//    }
+//
+//    fun pauseTimer() {
+//        timerJob?.cancel()
+//    }
+//
+//    fun stopTimer() {
+//        _timer.value = 0
+//        timerJob?.cancel()
+//    }
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//        timerJob?.cancel()
+//    }
+//}
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
+//    val sheetState = rememberModalBottomSheetState()
+//    var showBottomSheet by remember { mutableStateOf(false) }
+//    Scaffold (
+//        floatingActionButton = {
+//            FloatingActionButton(onClick = { showBottomSheet = false }) {
+//                Icon(imageVector = Icons.Default.Add, contentDescription = "add")
+//            }
+//        }
+//    ){
+//        Box(Modifier.padding(it)){
+//            if(userViewModel.timerActive==false && userViewModel.user.value.totalTime == 0){
+//                HomeScreenInit()
+//            }
+//            else if(userViewModel.timerActive==true){
+//                HomeScreenActive()
+//            }
+//            else if(userViewModel.timerActive==false && userViewModel.user.value.totalTime>0){
+//                HomeScreenHaveTime()
+//            }
+//            ModalBottomSheet(
+//                onDismissRequest = { showBottomSheet=false },
+//                sheetState = sheetState
+//            ) {
+//                Column {
+//                    Row {
+//                        Text(text ="취소", modifier = Modifier.clickable { showBottomSheet = false })
+//                        Text(text = "과목 추가하기", fontWeight = FontWeight.Bold)
+//                        Text(text = "완료", modifier = Modifier.clickable { showBottomSheet = false})
+//                    }
+//                    TextField(value = "", onValueChange = {})
+//
+//                }
+//            }
+//        }
+//    }
+//}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,10 +203,10 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
         ) {
             Box(Modifier.padding(it)) {
                 when {
-                    userViewModel.user.value.totalTime == 0L -> {
+                    userViewModel.user.value.todayStudyTime == 0L -> {
                         HomeScreenInit(userViewModel)
                     }
-                    userViewModel.user.value.totalTime > 0 -> {
+                    userViewModel.user.value.todayStudyTime > 0 -> {
                         HomeScreenHaveTime(userViewModel)
                     }
                 }
@@ -290,7 +365,7 @@ fun ItemUI(item: Subject) {
             tint = Color(android.graphics.Color.parseColor(item.cate)),
             contentDescription = "",
 
-        )
+            )
         Spacer(modifier = Modifier.width(30.dp))
         Text(text = item.name, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.width(30.dp))
@@ -367,7 +442,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 userViewModel.user.value.subjects.forEach{
-                    subject ->  DropdownMenuItem(
+                        subject ->  DropdownMenuItem(
                     text = {
                         val isSelected = subject.name == subName
                         val style = if (isSelected) {
@@ -382,7 +457,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                         subName = subject.name
                     },
                     modifier = Modifier.padding()
-                    )
+                )
                 }
             }
         }
@@ -446,14 +521,14 @@ fun TimerScreen(
 //        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if(!userViewModel.timerActive.value && userViewModel.user.value.totalTime == 0L){
+        if(!userViewModel.timerActive.value && userViewModel.user.value.todayStudyTime == 0L){
             Text(text = timerValue.formatTime(), fontSize = 24.sp)
         }
         else if(userViewModel.timerActive.value){
             Text(text = timerValue.formatTime(), fontSize = 24.sp, color = Color.White)
         }
-        else if(userViewModel.user.value.totalTime >0){
-            Text(userViewModel.user.value.totalTime.formatTime(), fontSize = 24.sp, color = Color.White)
+        else if(userViewModel.user.value.todayStudyTime >0){
+            Text(userViewModel.user.value.todayStudyTime.formatTime(), fontSize = 24.sp, color = Color.White)
         }
         if(userViewModel.timerActive.value){
             Text(text = userViewModel.selectedSub.name, color = Color.White)
@@ -485,7 +560,7 @@ fun TimerScreen(
                 onClick = {userViewModel.startTimer()}
                 buttonText = "공부 시작"
 
-                if(userViewModel.user.value.totalTime == 0L){
+                if(userViewModel.user.value.todayStudyTime == 0L){
                     containerColor = colorResource(id = R.color.konkukgreen)
                     contentColor = Color.White
                 }

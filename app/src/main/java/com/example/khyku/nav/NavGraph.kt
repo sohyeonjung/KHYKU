@@ -32,14 +32,14 @@ fun NavGraph(navController: NavHostController) {
 
     val context = LocalContext.current
     val userdb = UserProfileDatabase.getUserProfileDatabase(context)
-    val userviewModel:UserProfileViewModel =
+    val userviewModel: UserProfileViewModel =
         viewModel(factory = UserProfileViewModelFactory(UserRepository(userdb)))
 
     val postdb = PostDatabase.getPostDatabase(context)
     val postviewModel: PostViewModel =
         viewModel(factory = PostViewModelFactory(PostRepository(postdb)))
 
-    NavHost(navController = navController, startDestination = Routes.Home.route){
+    NavHost(navController = navController, startDestination = Routes.Login.route){
         composable(route = Routes.Community.route){
             CommunityScreen(navController)
         }
@@ -92,8 +92,19 @@ fun NavGraph(navController: NavHostController) {
             RegisterScreen(navController = navController, viewModel = userviewModel)
         }
         // userName 넘겨야함
-        composable(route = Routes.Profile.route){
-            UserProfileScreen(navController = navController, viewModel = userviewModel, userName = "yh" )
+        composable(
+            route = "Profile/{userName}",
+            arguments = listOf(
+                navArgument("userName") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        ) {
+            val userName = it.arguments?.getString("userName") ?: ""
+            UserProfileScreen(navController = navController, viewModel = userviewModel, userName = userName)
         }
     }
 }
+

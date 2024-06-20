@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,84 +25,199 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.khyku.nav.Routes
 import com.example.khyku.yh.userViewmodel.UserProfileViewModel
+import kotlinx.coroutines.launch
+
+//@ExperimentalMaterial3Api
+//@Composable
+//fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel): UserProfile? {
+//    val KonkukGreen = Color(0xFF036B3F)
+//
+//    var id by remember { mutableStateOf("") }
+//    var password by remember { mutableStateOf("") }
+//    var showAlert by remember { mutableStateOf(false) }
+//    var alertmsg by remember { mutableStateOf("") }
+//    val coroutineScope = rememberCoroutineScope()
+//    var user:UserProfile? = null
+//
+//    Column(
+//        modifier = Modifier
+//            .background(KonkukGreen)
+//            .fillMaxSize(),
+//    ) {
+//        Text(
+//            text = "건하예KU", color = Color.White,
+//            modifier = Modifier.padding(start = 95.dp, top = 200.dp, bottom = 30.dp),
+//            fontSize = 50.sp, fontWeight = FontWeight.Bold,
+//        )
+//        TextField(
+//            value = id,
+//            onValueChange = { id = it },
+//            placeholder = { Text("아이디", color = Color.Black) },
+//            colors = TextFieldDefaults.textFieldColors(
+//                containerColor = Color.White
+//            ),
+//            modifier = Modifier.padding(start = 70.dp, top = 50.dp, bottom = 30.dp)
+//        )
+//        TextField(
+//            value = password,
+//            onValueChange = { password = it },
+//            placeholder = { Text("비밀번호", color = Color.Black) },
+//            colors = TextFieldDefaults.textFieldColors(
+//                containerColor = Color.White
+//            ),
+//            modifier = Modifier.padding(start = 70.dp, bottom = 30.dp)
+//        )
+//        Button(
+//            onClick = {
+//                coroutineScope.launch {
+//                    val idLong = id.toLongOrNull()
+//                    if (idLong != null) {
+//                        viewModel.checkUserId(idLong) { idExists ->
+//                            if (!idExists) { // 아이디 없음
+//                                alertmsg = "존재하지 않는 아이디입니다."
+//                                showAlert = true
+//                            } else { // 아이디 있음, 비밀번호 확인
+//                                viewModel.checkUserPassword(idLong, password) { passwordMatches ->
+//                                    if (!passwordMatches) {
+//                                        alertmsg = "비밀번호가 일치하지 않습니다."
+//                                        showAlert = true
+//                                    } else { // 모두 일치함
+//                                        coroutineScope.launch {
+//                                            user = viewModel.getUserById(idLong)
+//                                            // Home 화면으로 이동
+//                                            Handler(Looper.getMainLooper()).postDelayed({
+//                                                navController.navigate(Routes.Home.route)
+//                                            }, 2000)
+//
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            },
+//            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
+//            modifier = Modifier.padding(start = 170.dp, bottom = 30.dp)
+//        ) {
+//            Text(text = "로그인", color = Color.Black)
+//        }
+//        Button(onClick = { navController.navigate(Routes.Register.route) },
+//            colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
+//            Text(
+//                text = "회원 가입", color = Color.White,
+//                modifier = Modifier.padding(start = 160.dp, bottom = 30.dp)
+//            )
+//        }
+//        if (showAlert) {
+//            AlertDialog(
+//                onDismissRequest = { showAlert = false },
+//                title = { Text(text = alertmsg, color = Color.Black, fontWeight = FontWeight.Bold) },
+//                confirmButton = {
+//                    Button(onClick = { showAlert = false },
+//                        colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
+//                        Text("취소", color = Color.White)
+//                    }
+//                },
+//                containerColor = Color.White
+//            )
+//        }
+//    }
+//    return user
+//}
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(navController: NavController, viewModel: UserProfileViewModel) {
-    // return UserProfile?
     val KonkukGreen = Color(0xFF036B3F)
 
-    var id by remember{ mutableStateOf("") }
-    var password by remember{ mutableStateOf("") }
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var showAlert by remember { mutableStateOf(false) }
     var alertmsg by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
-    Column (
+    Column(
         modifier = Modifier
             .background(KonkukGreen)
             .fillMaxSize(),
-    ){
-        Text(text = "건하예KU", color = Color.White,
-            modifier = Modifier.padding(start=95.dp, top=200.dp, bottom=30.dp),
-            fontSize = 50.sp, fontWeight = FontWeight.Bold, )
+    ) {
+        Text(
+            text = "건하예KU", color = Color.White,
+            modifier = Modifier.padding(start = 95.dp, top = 200.dp, bottom = 30.dp),
+            fontSize = 50.sp, fontWeight = FontWeight.Bold,
+        )
         TextField(
             value = id,
-            onValueChange = {id = it},
+            onValueChange = { id = it },
             placeholder = { Text("아이디", color = Color.Black) },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.White
             ),
-            modifier = Modifier.padding(start=70.dp, top=50.dp, bottom=30.dp)
+            modifier = Modifier.padding(start = 70.dp, top = 50.dp, bottom = 30.dp)
         )
         TextField(
             value = password,
-            onValueChange = {password=it},
+            onValueChange = { password = it },
             placeholder = { Text("비밀번호", color = Color.Black) },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.White
             ),
-            modifier = Modifier.padding(start=70.dp, bottom=30.dp)
+            modifier = Modifier.padding(start = 70.dp, bottom = 30.dp)
         )
         Button(
             onClick = {
-                viewModel.checkUserId(id.toLong()) { idExists ->
-                    if (!idExists) { //아이디 없
-                        alertmsg = "존재하지 않는 아이디입니다."
-                        showAlert = true
-                    } else { //아이디 있 비번 없
-                        viewModel.checkUserPassword(id.toLong(), password) { passwordMatches ->
-                            if (!passwordMatches) {
-                                alertmsg = "비밀번호가 일치하지 않습니다."
+                coroutineScope.launch {
+                    val idLong = id.toLongOrNull()
+                    if (idLong != null) {
+                        viewModel.checkUserId(idLong) { idExists ->
+                            if (!idExists) { // 아이디 없음
+                                alertmsg = "존재하지 않는 아이디입니다."
                                 showAlert = true
-                            } else { //모두 일치함
-                                // TODO(navigate to main screen)
-                                //return viewModel.getUserById
+                            } else { // 아이디 있음, 비밀번호 확인
+                                viewModel.checkUserPassword(idLong, password) { passwordMatches ->
+                                    if (!passwordMatches) {
+                                        alertmsg = "비밀번호가 일치하지 않습니다."
+                                        showAlert = true
+                                    } else { // 모두 일치함
+                                        coroutineScope.launch {
+                                            val user = viewModel.getUserById(idLong)
+                                            user?.let {
+                                                // Home 화면으로 이동하고 userName 전달
+                                                navController.navigate("Profile/${it.userName}")
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow),
-            modifier = Modifier.padding(start=170.dp, bottom=30.dp)
+            modifier = Modifier.padding(start = 170.dp, bottom = 30.dp)
         ) {
             Text(text = "로그인", color = Color.Black)
         }
-        Button(onClick = { navController.navigate(Routes.Register.route)},
+        Button(onClick = { navController.navigate(Routes.Register.route) },
             colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
-            Text(text = "회원 가입", color = Color.White,
-                modifier = Modifier.padding(start=160.dp, bottom=30.dp))
+            Text(
+                text = "회원 가입", color = Color.White,
+                modifier = Modifier.padding(start = 160.dp, bottom = 30.dp)
+            )
         }
-        if(showAlert){
+        if (showAlert) {
             AlertDialog(
-                onDismissRequest = { showAlert=false },
-                title = { Text(text = alertmsg, color = Color.Black, fontWeight = FontWeight.Bold)},
-                confirmButton = { Button(onClick = { showAlert=false },
-                    colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
-                    Text("취소", color = Color.White)
-                } },
+                onDismissRequest = { showAlert = false },
+                title = { Text(text = alertmsg, color = Color.Black, fontWeight = FontWeight.Bold) },
+                confirmButton = {
+                    Button(onClick = { showAlert = false },
+                        colors = ButtonDefaults.buttonColors(containerColor = KonkukGreen)) {
+                        Text("취소", color = Color.White)
+                    }
+                },
                 containerColor = Color.White
             )
         }
     }
 }
-
