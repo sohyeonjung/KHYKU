@@ -46,11 +46,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.R
-import com.example.khyku.User.Subject
-import com.example.khyku.User.User
+import com.example.khyku.yh.ProfileScreen.formatTime
+import com.example.khyku.yh.userDB.Subject
+import com.example.khyku.yh.userDB.UserProfile
+import com.example.khyku.yh.userViewmodel.UserProfileViewModel
+import com.example.khyku.yh.userViewmodel.UserProfileViewModelFactory
+import com.example.khyku.yh.userViewmodel.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,18 +64,35 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class UserViewModel: ViewModel(){
-    var user: MutableState<User>
+class UserViewModelFactory(private val userProfile:UserProfile?): ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+            return UserViewModel(userProfile) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class UserViewModel(private val userProfile:UserProfile?): ViewModel(){
+    var user: MutableState<UserProfile> = mutableStateOf(userProfile ?: UserProfile(0, "", "",""))
     var selectedSub:Subject
     var timerActive = mutableStateOf(false)
     init{
-        user = mutableStateOf<User>(User("dy", mutableListOf<Subject>(Subject("과목", "#589288", 0, true)), 0))
+//        user.value = userProfile
+//        user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
+//        selectedSub = user.value.subjects[0]
+        if (userProfile != null) {
+            user.value = userProfile
+        }
+        if (user.value.subjects.isEmpty()) {
+            user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
+        }
         selectedSub = user.value.subjects[0]
     }
     fun addSubject(sub:Subject) {
         var updateSubject = user.value.subjects + sub
         //not use add
-        user.value = user.value.copy(subjects = updateSubject)
+        user.value.subjects = updateSubject
     }
 
     fun changeTimerActive(){
@@ -99,7 +121,7 @@ class UserViewModel: ViewModel(){
 
     fun stopTimer() {
         selectedSub.time += _timer.value
-        user.value.totalTime += _timer.value
+        user.value.todayStudyTime += _timer.value
         _timer.value = 0
         timerJob?.cancel()
     }
@@ -182,10 +204,16 @@ class UserViewModel: ViewModel(){
 //    }
 //}
 
+@Composable
+fun HomeScreen(userProfile: UserProfile?) {
+    val userviewModel: UserViewModel =
+        viewModel(factory = UserViewModelFactory(userProfile))
+    HomeScreenInside(userViewModel = userviewModel)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
+fun HomeScreenInside(userViewModel: UserViewModel) {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if(!userViewModel.timerActive.value){
@@ -201,10 +229,10 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
         ) {
             Box(Modifier.padding(it)) {
                 when {
-                    userViewModel.user.value.totalTime == 0L -> {
+                    userViewModel.user.value.todayStudyTime == 0L -> {
                         HomeScreenInit(userViewModel)
                     }
-                    userViewModel.user.value.totalTime > 0 -> {
+                    userViewModel.user.value.todayStudyTime > 0 -> {
                         HomeScreenHaveTime(userViewModel)
                     }
                 }
@@ -519,14 +547,14 @@ fun TimerScreen(
 //        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if(!userViewModel.timerActive.value && userViewModel.user.value.totalTime == 0L){
+        if(!userViewModel.timerActive.value && userViewModel.user.value.todayStudyTime == 0L){
             Text(text = timerValue.formatTime(), fontSize = 24.sp)
         }
         else if(userViewModel.timerActive.value){
             Text(text = timerValue.formatTime(), fontSize = 24.sp, color = Color.White)
         }
-        else if(userViewModel.user.value.totalTime >0){
-            Text(userViewModel.user.value.totalTime.formatTime(), fontSize = 24.sp, color = Color.White)
+        else if(userViewModel.user.value.todayStudyTime >0){
+            Text(userViewModel.user.value.todayStudyTime.formatTime(), fontSize = 24.sp, color = Color.White)
         }
         if(userViewModel.timerActive.value){
             Text(text = userViewModel.selectedSub.name, color = Color.White)
@@ -558,7 +586,7 @@ fun TimerScreen(
                 onClick = {userViewModel.startTimer()}
                 buttonText = "공부 시작"
 
-                if(userViewModel.user.value.totalTime == 0L){
+                if(userViewModel.user.value.todayStudyTime == 0L){
                     containerColor = colorResource(id = R.color.konkukgreen)
                     contentColor = Color.White
                 }

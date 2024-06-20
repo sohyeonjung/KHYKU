@@ -36,6 +36,14 @@ class UserProfileViewModel(private val repository: UserRepository) : ViewModel()
             null
         }
     }
+    suspend fun getUserById(userId: Long): UserProfile? {
+        return if (userId != 0L) {
+            repository.getUserById(userId).firstOrNull()
+        } else {
+            null
+        }
+    }
+
     fun InsertUserProfile(user: UserProfile?) {
         if (user != null) {
             viewModelScope.launch {
