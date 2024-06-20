@@ -46,31 +46,54 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.khyku.R
+import com.example.khyku.yh.ProfileScreen.formatTime
 import com.example.khyku.yh.userDB.Subject
 import com.example.khyku.yh.userDB.UserProfile
+import com.example.khyku.yh.userViewmodel.UserProfileViewModel
+import com.example.khyku.yh.userViewmodel.UserProfileViewModelFactory
+import com.example.khyku.yh.userViewmodel.UserRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class UserViewModel: ViewModel(){
-    var user: MutableState<UserProfile>
-    var selectedSub: Subject
+class UserViewModelFactory(private val userProfile:UserProfile?): ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+            return UserViewModel(userProfile) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class UserViewModel(private val userProfile:UserProfile?): ViewModel(){
+    //var user: MutableState<UserProfile> = mutableStateOf(userProfile ?: UserProfile(0, "", "",""))
+    var user:MutableState<UserProfile> by remember { mutableStateOf(userProfile ?: UserProfile(0, "", "","")) }
+    var selectedSub:Subject
     var timerActive = mutableStateOf(false)
+    val localtime = LocalTime.now().toSecondOfDay().toLong()
     init{
-        user = mutableStateOf<UserProfile>(
-            UserProfile(0, "", "", ""))
-        user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
+//        user.value = userProfile
+//        user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
+//        selectedSub = user.value.subjects[0]
+        if (userProfile != null) {
+            user.value = userProfile
+        }
+        if (user.value.subjects.isEmpty()) {
+            user.value.subjects = mutableListOf(Subject("과목", "#589288", 0, true))
+        }
         selectedSub = user.value.subjects[0]
     }
     fun addSubject(sub:Subject) {
-        val updateSubject = user.value.subjects + sub
+        var updateSubject = user.value.subjects + sub
         //not use add
         user.value.subjects = updateSubject
     }
@@ -184,10 +207,16 @@ class UserViewModel: ViewModel(){
 //    }
 //}
 
+@Composable
+fun HomeScreen(userProfile: UserProfile?, userProfileViewModel: UserProfileViewModel) {
+    val userviewModel: UserViewModel =
+        viewModel(factory = UserViewModelFactory(userProfile))
+    HomeScreenInside(userViewModel = userviewModel, userProfileViewModel = userProfileViewModel)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
+fun HomeScreenInside(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel) {
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if(!userViewModel.timerActive.value){
@@ -204,33 +233,34 @@ fun HomeScreen(userViewModel: UserViewModel = viewModel()) {
             Box(Modifier.padding(it)) {
                 when {
                     userViewModel.user.value.todayStudyTime == 0L -> {
-                        HomeScreenInit(userViewModel)
+                        HomeScreenInit(userViewModel, userProfileViewModel)
                     }
                     userViewModel.user.value.todayStudyTime > 0 -> {
-                        HomeScreenHaveTime(userViewModel)
+                        HomeScreenHaveTime(userViewModel, userProfileViewModel)
                     }
                 }
                 if (showBottomSheet) {
                     ModalBottomSheet(
                         onDismissRequest = { showBottomSheet = false },
                     ) {
-                        SubjectAdder(userViewModel) {
+                        SubjectAdder(userViewModel, userProfileViewModel) {
                             showBottomSheet = false
                         }
+                        userProfileViewModel
                     }
                 }
             }
         }
     }
     else{
-        HomeScreenActive(userViewModel)
+        HomeScreenActive(userViewModel, userProfileViewModel)
     }
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
+fun SubjectAdder(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel, onClose: () -> Unit) {
     var subjectName by remember { mutableStateOf("") }
     var colorStrings = remember { mutableStateListOf("#589288", "#77aa64", "#9fbf69", "#d1da6c", "#f8ec77") }
     var subjectCate by remember { mutableStateOf(colorStrings[0]) }
@@ -254,6 +284,7 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
                 }
                 else{
                     userViewModel.addSubject(Subject(name = subjectName, cate = subjectCate, time = 0, false))
+                    userProfileViewModel.UpdateUserProfile(userViewModel.user.value)
                     onClose()
                 }
             })
@@ -325,7 +356,7 @@ fun SubjectAdder(userViewModel: UserViewModel, onClose: () -> Unit) {
 
 
 @Composable
-fun HomeScreenHaveTime(userViewModel: UserViewModel) {
+fun HomeScreenHaveTime(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel) {
     Column {
         Column(
             modifier = Modifier
@@ -341,7 +372,7 @@ fun HomeScreenHaveTime(userViewModel: UserViewModel) {
             DropDownBoxField(userViewModel)
             Spacer(modifier = Modifier.height(28.dp))
             //TimerButtonField(userViewModel)
-            TimerScreenContent(userViewModel)
+            TimerScreenContent(userViewModel, userProfileViewModel)
             Spacer(modifier = Modifier.height(40.dp))
         }
         LazyColumn (modifier = Modifier.background(Color.White)){
@@ -365,7 +396,7 @@ fun ItemUI(item: Subject) {
             tint = Color(android.graphics.Color.parseColor(item.cate)),
             contentDescription = "",
 
-            )
+        )
         Spacer(modifier = Modifier.width(30.dp))
         Text(text = item.name, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.width(30.dp))
@@ -374,7 +405,7 @@ fun ItemUI(item: Subject) {
 }
 
 @Composable
-fun HomeScreenActive(userViewModel: UserViewModel) {
+fun HomeScreenActive(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.konkukgreen)), Arrangement.Top, Alignment.CenterHorizontally) {
@@ -384,12 +415,12 @@ fun HomeScreenActive(userViewModel: UserViewModel) {
         //TimerField(userViewModel)
         Text(userViewModel.selectedSub.name, color = Color.White)
         Spacer(modifier = Modifier.height(28.dp))
-        TimerScreenContent(userViewModel)
+        TimerScreenContent(userViewModel, userProfileViewModel)
     }
 }
 
 @Composable
-fun HomeScreenInit(userViewModel: UserViewModel) {
+fun HomeScreenInit(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel) {
     Column(modifier = Modifier.fillMaxSize(), Arrangement.Top, Alignment.CenterHorizontally){
         Spacer(modifier = Modifier.height(24.dp))
         DateField()
@@ -399,7 +430,7 @@ fun HomeScreenInit(userViewModel: UserViewModel) {
         DropDownBoxField(userViewModel)
         Spacer(modifier = Modifier.height(20.dp))
         //TimerButtonField(userViewModel)
-        TimerScreenContent(userViewModel)
+        TimerScreenContent(userViewModel, userProfileViewModel)
     }
 }
 
@@ -442,7 +473,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }) {
                 userViewModel.user.value.subjects.forEach{
-                        subject ->  DropdownMenuItem(
+                    subject ->  DropdownMenuItem(
                     text = {
                         val isSelected = subject.name == subName
                         val style = if (isSelected) {
@@ -457,7 +488,7 @@ fun DropDownBoxField(userViewModel: UserViewModel) {
                         subName = subject.name
                     },
                     modifier = Modifier.padding()
-                )
+                    )
                 }
             }
         }
@@ -499,7 +530,7 @@ fun Long.formatTime(): String {
 }
 
 @Composable
-fun TimerScreenContent(userViewModel: UserViewModel) {
+fun TimerScreenContent(userViewModel: UserViewModel, userProfileViewModel: UserProfileViewModel) {
     val timerValue by userViewModel.timer.collectAsState()
 
     TimerScreen(
@@ -507,14 +538,16 @@ fun TimerScreenContent(userViewModel: UserViewModel) {
 //        onStartClick = { timerViewModel.startTimer() },
 //        onPauseClick = { timerViewModel.pauseTimer() },
 //        onStopClick = { timerViewModel.stopTimer() }
-        userViewModel = userViewModel
+        userViewModel = userViewModel,
+        userProfileViewModel = userProfileViewModel
     )
 }
 
 @Composable
 fun TimerScreen(
     timerValue: Long,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    userProfileViewModel: UserProfileViewModel
 ) {
     Column(
 //        modifier = Modifier.fillMaxSize(),
@@ -557,7 +590,10 @@ fun TimerScreen(
             var buttonText: String
 
             if(!userViewModel.timerActive.value){
-                onClick = {userViewModel.startTimer()}
+                onClick = {
+                    userViewModel.startTimer()
+                    userProfileViewModel.startStudySession(userViewModel.user.value, LocalTime.now().toSecondOfDay().toLong())
+                }
                 buttonText = "공부 시작"
 
                 if(userViewModel.user.value.todayStudyTime == 0L){
@@ -572,7 +608,11 @@ fun TimerScreen(
             else{
                 containerColor = Color.White
                 contentColor = colorResource(id = R.color.konkukgreen)
-                onClick = {userViewModel.stopTimer()}
+                onClick = {
+                    userViewModel.stopTimer()
+                    userProfileViewModel.endStudySession(userViewModel.user.value, LocalTime.now().toSecondOfDay().toLong())
+                    userProfileViewModel.updateSubjectStudyTime(userViewModel.user.value, userViewModel.selectedSub.name)
+                }
                 buttonText = "중지"
             }
 

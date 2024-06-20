@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "posts")
 data class Post(
+    var userName:String,
     var postTitle:String,
     var postContents:String,
     var postType:String,
